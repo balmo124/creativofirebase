@@ -268,7 +268,7 @@ function browse(){return `<main class="home">
 <article class="step"><div class="step-number">04</div><h3>Hear back from them</h3><p>Track your request and see the provider’s response in your bookings.</p></article>
 </div></div></section>
 <section class="creative-cta"><div class="wrap"><div class="cta-box"><div><span class="eyebrow">For local creatives</span><h2>Let more people discover your work.</h2><p>Create a provider profile and start receiving booking requests.</p></div><button class="btn" data-act="providerSignup">Join as a provider</button></div></div></section>
-<footer><div class="wrap">Creativo · Connecting Surigao with local creative talent</div></footer></main>`}
+<footer><div class="wrap">Creativo · Connecting Surigao with local creative talent<br><span class="mute sm">© 2026 Creativo. All rights reserved.</span></div></footer></main>`}
 function detail(){const p=find(S.sel);if(!p)return browse();return `<div class="wrap pg"><button class="btn alt sm back" data-act="go" data-v="browse">Back to browse</button>${banner()}
 <div class="two"><div><h1 style="font-size:clamp(30px,5vw,46px)">${esc(p.name)}</h1><div class="mute" style="margin-top:6px">${esc(p.cat)} in ${esc(p.city)} · ${ratingLabel(p)}</div>
 <div class="big" style="background:linear-gradient(135deg,${hue[p.cat]})"></div><p>${esc(p.about)}</p><div class="tags">${p.tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div></div>
@@ -277,8 +277,8 @@ function detail(){const p=find(S.sel);if(!p)return browse();return `<div class="
 <label for="n">What do you need?</label><textarea id="n" rows="4" maxlength="500" placeholder="Event type, location, number of guests"></textarea>
 <div style="margin-top:16px"><button class="btn" style="width:100%" data-act="book">${S.user?"Send booking request":"Sign in to book"}</button></div></div></div></div>`}
 function auth(){const up=S.mode==="up";return `<div class="wrap pg" style="max-width:460px">${banner()}<div class="panel"><h2 style="font-size:30px">${up?"Create your account":"Welcome back"}</h2>
-${up?`<label for="nm">Name</label><input id="nm" autocomplete="name"><label>I want to</label><div class="seg"><button class="chip${S.role==="consumer"?" on":""}" data-act="role" data-r="consumer">Book creatives</button><button class="chip${S.role==="provider"?" on":""}" data-act="role" data-r="provider">Offer my services</button></div>
-${S.role==="provider"?`<label for="ct">My category</label><select id="ct"><option>Photography</option><option>Videography</option><option>Events</option></select>`:""}`:""}
+${up?`<label for="nm">Name</label><input id="nm" autocomplete="name"><label>I want to</label><div class="seg"><button class="chip${S.role==="consumer"?" on":""}" data-act="role" data-r="consumer">Book creatives</button><button class="chip${S.role==="provider"?" on":""}" data-act="role" data-r="provider">Offer my services</button><button class="chip${S.role==="admin"?" on":""}" data-act="role" data-r="admin">Admin</button></div>
+${S.role==="admin"?`<p class="mute sm">Admin signup is limited to the configured email and six-digit access code.</p><label for="admin-code">Admin access code</label><input id="admin-code" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="6-digit code">`:""}${S.role==="provider"?`<label for="ct">My category</label><select id="ct"><option>Photography</option><option>Videography</option><option>Events</option></select>`:""}`:""}
 <label for="em">Email</label><input id="em" type="email" autocomplete="email"><label for="pw">Password</label><input id="pw" type="password" autocomplete="${up?"new-password":"current-password"}" placeholder="At least 6 characters">
 <div style="margin-top:18px"><button class="btn" style="width:100%" data-act="auth">${up?"Create account":"Sign in"}</button></div>
 <div style="margin-top:14px;text-align:center"><button class="lnk" data-act="mode">${up?"I already have an account":"Create a new account"}</button></div></div></div>`}
@@ -399,7 +399,7 @@ else if(a==="signup"){S.mode="up";S.role="consumer";S.msg=null;await go("auth")}
 else if(a==="providerSignup"){S.mode="up";S.role="provider";S.msg=null;await go("auth")}
 else if(a==="scroll")document.getElementById(d.target)?.scrollIntoView({behavior:"smooth"});
 else if(a==="cat"){S.cat=d.c;render();if(t.closest(".hero"))document.getElementById("services")?.scrollIntoView({behavior:"smooth"})}
-else if(a==="open"){S.sel=+d.id;await go("detail")}
+else if(a==="open"){S.sel=d.id;await go("detail")}
 else if(a==="out"){saveToken(null);S.user=null;S.bk=[];await go("browse")}
 else if(a==="mode"){S.mode=S.mode==="up"?"in":"up";S.msg=null;render()}
 else if(a==="role"){S.role=d.r;render()}
@@ -420,7 +420,7 @@ else if(a==="book"){
   S.view="bookings";await loadBk();S.msg=["ok","Request sent. The provider will reply here."];render();scrollTo(0,0)}
 else if(a==="auth"){
   const body={email:v("#em"),password:v("#pw")};
-  if(S.mode==="up"){body.name=v("#nm");body.role=S.role;body.category=v("#ct")||undefined}
+  if(S.mode==="up"){body.name=v("#nm");body.role=S.role;body.category=v("#ct")||undefined;if(S.role==="admin")body.adminCode=v("#admin-code")}
   const r=await api(S.mode==="up"?"/signup":"/login",{method:"POST",body});
   saveToken(r.token);S.user=r.user;
   if(S.mode==="up"&&r.user.role==="provider")S.P=await api("/providers");
