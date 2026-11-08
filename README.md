@@ -27,6 +27,10 @@ Signed-in clients and providers can use **Contact admin** to send a question or 
 
 When a provider accepts a booking, the client and provider can see each other's account email in that booking and use it to contact each other outside Creativo. Emails stay hidden while a booking is pending or declined. Provider profiles without a linked account email cannot share a contact email this way.
 
+Clients and providers can open **Profile** to update their name and account email, change their password, and switch the appearance theme. The current password is required before changing an email or password. Clients can review all booking requests and their statuses in **Booking history**; providers can review requests in the dashboard's **Booking history** tab.
+
+The marketplace can rank provider listings by **Most requested** (all booking requests), **Top rated**, or **Newest**. Signed-in users can report a provider profile; reports are limited to one per account and profile and appear in the admin dashboard's **Reports** tab for review.
+
 For local development, put `ADMIN_EMAIL` in the ignored `.env` file described below, then run:
 
 ```powershell
@@ -83,16 +87,18 @@ Do not set `SEED_DEMO` in production.
 | GET    | /api/me             | signed in      | Current user                         |
 | GET    | /api/providers      | anyone         | List all providers                   |
 | GET    | /api/providers/:id  | anyone         | One provider                         |
+| POST   | /api/providers/:id/report | signed in | Report a provider profile            |
 | GET    | /api/bookings       | signed in      | Your bookings/requests; shares email only after acceptance |
 | POST   | /api/bookings       | client         | Send a booking request               |
 | PATCH  | /api/bookings/:id   | client/provider| Cancel (client) or accept/decline (provider) |
 | POST   | /api/bookings/:id/review | client with an accepted booking | Submit one 1–5 star rating |
 | GET    | /api/admin/overview | admin          | Marketplace counts and recent activity |
-| GET    | /api/admin/:section | admin          | People, provider, booking, or message records |
-| POST   | /api/messages       | signed in      | Send a message to the admin team |
+| GET    | /api/admin/:section | admin          | People, provider, booking, message, or report records |
+| PATCH  | /api/admin/reports/:id | admin       | Mark a profile report reviewed or dismissed |
+| POST   | /api/messages       | signed in      | Send a message to the admin team     |
 
 Clients can submit one 1–5 star rating for each accepted booking from **My bookings**. The average and rating count appear on the creative’s listing and profile.
 
 ## Ideas for next steps
 
-Provider profile editing, portfolio image uploads, written reviews, and email notifications.
+Portfolio image uploads, written reviews, and email notifications.

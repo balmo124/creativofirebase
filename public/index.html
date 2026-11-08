@@ -105,14 +105,16 @@ input,select,textarea{border-radius:12px}
 .section-head h2,.how h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.03em}
 .section-head p{margin:8px 0 0;color:var(--mute)}
 .section-kicker{display:block;color:var(--acc);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
-.service-tools{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:23px}
+.service-tools{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:23px}
 .service-tools .chip{padding:9px 16px}
+.service-tools label{margin:0 0 0 auto}
+.service-tools select{width:auto;min-width:190px;margin-left:0}
 .grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding-bottom:0}
 .card{border-color:var(--line);border-radius:18px;box-shadow:0 5px 18px rgba(24,38,57,.045);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
 .card:hover{border-color:#e6a47b;transform:translateY(-4px);box-shadow:0 14px 30px rgba(24,38,57,.1)}
 .cover{height:150px;overflow:hidden}
 .cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(12,24,39,.32))}
-.cover span{z-index:1;left:14px;bottom:13px;background:rgba(255,255,255,.94);padding:5px 11px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.cover span{z-index:1;left:14px;bottom:13px;background:rgba(255,255,255,.94);color:#17243a;padding:5px 11px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .cb{padding:17px 18px 19px}
 .cb h3{font-size:21px}
 .cb .row{margin-top:17px;padding-top:13px;border-top:1px solid var(--line)}
@@ -195,6 +197,14 @@ footer{padding:24px 0;border-top:1px solid var(--line);color:var(--mute);font-si
 .listing-form .full{grid-column:1/-1}
 .listing-form textarea{resize:vertical}
 .listing-form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.profile-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(240px,.7fr);gap:16px;align-items:start}
+.profile-card h2{font-size:20px;margin-bottom:8px}
+.profile-card p{margin:0 0 12px}
+.profile-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.profile-help{font-size:13px;color:var(--mute);margin-top:7px}
+.social-links{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+.social-link{display:inline-flex;align-items:center;padding:8px 13px;border:1px solid var(--line);border-radius:999px;color:var(--acc);font-size:14px;font-weight:600;text-decoration:none}
+.social-link:hover{background:var(--line)}
 .admin-tools{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
 .admin-search{max-width:360px}
 .admin-table-wrap{overflow-x:auto}
@@ -210,7 +220,7 @@ footer{padding:24px 0;border-top:1px solid var(--line);color:var(--mute);font-si
 .admin-message p{white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0 0}
 :root[data-theme="dark"] .dash-banner{background:linear-gradient(115deg,#090e20,#21183e)}
 :root[data-theme="dark"] .dash-kpi,:root[data-theme="dark"] .dash-panel{box-shadow:0 4px 18px rgba(0,0,0,.2)}
-@media(max-width:760px){.hero{padding:54px 0 46px}.hero-inner{grid-template-columns:1fr;gap:12px}.hero-art{min-height:235px}.art-frame{height:220px;width:min(80%,330px)}.art-sun{width:130px;height:130px}.steps{grid-template-columns:repeat(2,1fr)}.section{padding:50px 0}.portal-head{align-items:flex-start;flex-direction:column}}
+@media(max-width:760px){.hero{padding:54px 0 46px}.hero-inner{grid-template-columns:1fr;gap:12px}.hero-art{min-height:235px}.art-frame{height:220px;width:min(80%,330px)}.art-sun{width:130px;height:130px}.steps{grid-template-columns:repeat(2,1fr)}.section{padding:50px 0}.portal-head{align-items:flex-start;flex-direction:column}.profile-grid{grid-template-columns:1fr}}
 @media(max-width:520px){.wrap{padding:0 17px}.nr{height:auto;min-height:64px}.logo{font-size:22px}nav{gap:2px}.lnk{font-size:12px;padding:8px}.btn.sm{padding:8px 11px}.hero h1{font-size:clamp(40px,12vw,56px)}.hero-search{border-radius:18px;flex-wrap:wrap}.hero-search input{flex:1}.hero-search .btn{width:100%}.section-head{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.cta-box{align-items:flex-start;flex-direction:column;padding:28px 24px}.stats{grid-template-columns:1fr}.stats .panel b{font-size:26px}}
 @media(max-width:760px){.dash-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.dash-charts{grid-template-columns:1fr}.dash-top{align-items:flex-start;flex-direction:column}.dash-actions{width:100%;justify-content:space-between}.dash-booking{grid-template-columns:1fr auto}.dash-booking .acts{grid-column:1/-1}}
 @media(max-width:520px){.dash-tabs{margin-top:16px}.dash-tab{padding:10px 12px}.dash-kpi{padding:13px}.listing-form{grid-template-columns:1fr}.listing-form .full{grid-column:auto}.mix-layout{justify-content:space-around}}
@@ -218,12 +228,13 @@ footer{padding:24px 0;border-top:1px solid var(--line);color:var(--mute);font-si
 <body><div id="app"></div>
 <script>
 const cats=["All","Photography","Videography","Events"];
+const socialFields=[["instagram","Instagram"],["facebook","Facebook"],["tiktok","TikTok"],["youtube","YouTube"],["website","Website"]];
 const hue={Photography:"#0b7a75,#7fd1b9",Videography:"#1f3a5f,#5b8def",Events:"#f5b82e,#f08a5d"};
 const today=new Date().toISOString().slice(0,10);
 let T=null;try{T=localStorage.getItem("cv_token")}catch(e){}
 let savedTheme=null;try{savedTheme=localStorage.getItem("cv_theme")}catch(e){}
 const theme=savedTheme==="light"||savedTheme==="dark"?savedTheme:(window.matchMedia?.("(prefers-color-scheme: dark)").matches?"dark":"light");
-const S={view:"browse",user:null,P:[],bk:[],cat:"All",q:"",sel:null,mode:"in",role:"consumer",msg:null,after:null,theme,dashTab:"overview",listingEdit:false,adminOverview:null,adminTab:"overview",adminRows:[],adminSearch:""};
+const S={view:"browse",user:null,P:[],bk:[],cat:"All",q:"",sortBy:"popular",sel:null,reporting:false,mode:"in",role:"consumer",msg:null,after:null,theme,dashTab:"overview",listingEdit:false,adminOverview:null,adminTab:"overview",adminRows:[],adminSearch:""};
 document.documentElement.dataset.theme=S.theme;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const $=s=>document.querySelector(s);
@@ -246,20 +257,24 @@ function banner(){return S.msg?`<div class="msg ${S.msg[0]}">${esc(S.msg[1])}</d
 function nav(){const u=S.user,on=v=>S.view===v?" on":"";
 return `<header><div class="wrap nr"><div class="logo" data-act="go" data-v="browse">Creativ<i>o</i></div><nav>
 <button class="lnk${on("browse")}" data-act="go" data-v="browse">Browse</button>
-${u?`${u.role==="provider"?`<button class="lnk${on("bookings")}" data-act="go" data-v="bookings">Dashboard</button>`:`<button class="lnk${on("bookings")}" data-act="go" data-v="bookings">My bookings</button>`}${u.isAdmin?`<button class="lnk${on("admin")}" data-act="go" data-v="admin">Admin panel</button>`:`<button class="lnk${on("contact")}" data-act="go" data-v="contact">Contact admin</button>`}<button class="lnk" data-act="out">Sign out</button>`:`<button class="lnk" data-act="go" data-v="auth">Sign in</button><button class="btn sm" data-act="signup">Join Creativo</button>`}
+${u?`${u.role==="provider"?`<button class="lnk${on("bookings")}" data-act="go" data-v="bookings">Dashboard</button>`:`<button class="lnk${on("bookings")}" data-act="go" data-v="bookings">Booking history</button>`}${u.isAdmin?`<button class="lnk${on("admin")}" data-act="go" data-v="admin">Admin panel</button>`:`<button class="lnk${on("contact")}" data-act="go" data-v="contact">Contact admin</button>`}<button class="lnk${on("settings")}" data-act="go" data-v="settings">Profile</button><button class="lnk" data-act="out">Sign out</button>`:`<button class="lnk" data-act="go" data-v="auth">Sign in</button><button class="btn sm" data-act="signup">Join Creativo</button>`}
 <button class="lnk theme-toggle" data-act="theme" aria-pressed="${S.theme==="dark"}" aria-label="Switch to ${S.theme==="dark"?"light":"dark"} mode" title="Switch to ${S.theme==="dark"?"light":"dark"} mode">${S.theme==="dark"?"☀":"☾"}</button>
 </nav></div></header>`}
 function ratingLabel(p){return p.reviewCount?`★ ${esc(p.rating)} · ${p.reviewCount} ${p.reviewCount===1?"rating":"ratings"}`:p.rating==="New"?"New profile":"★ "+esc(p.rating)}
 function cards(){const q=S.q.toLowerCase();
 const r=S.P.filter(p=>(S.cat==="All"||p.cat===S.cat)&&(p.name+p.city+p.tag+p.tags.join(" ")).toLowerCase().includes(q));
-return r.length?r.map(p=>`<div class="card" tabindex="0" role="button" aria-label="View ${esc(p.name)} profile" data-act="open" data-id="${p.id}"><div class="cover" style="background:linear-gradient(135deg,${hue[p.cat]})"><span>${esc(p.cat)}</span></div><div class="cb"><h3>${esc(p.name)}</h3><div class="mute sm">${esc(p.tag)}</div><div class="provider-tags">${p.tags.slice(0,3).map(t=>`<span>${esc(t)}</span>`).join("")}</div><div class="row"><span>${ratingLabel(p)}</span><span>from ${peso(p.rate)}</span></div><div class="mute sm" style="margin-top:9px">${esc(p.city)}</div></div></div>`).join(""):`<div class="empty">No creatives match that search. Try another category or clear the search box.</div>`}
+const score=p=>Number.parseFloat(p.rating)||0;
+r.sort((a,b)=>S.sortBy==="newest"?String(b.created||"").localeCompare(String(a.created||"")):
+ S.sortBy==="rated"?score(b)-score(a)||(b.reviewCount||0)-(a.reviewCount||0)||(b.bookingCount||0)-(a.bookingCount||0):
+ (b.bookingCount||0)-(a.bookingCount||0)||score(b)-score(a)||(b.reviewCount||0)-(a.reviewCount||0));
+return r.length?r.map(p=>`<div class="card" tabindex="0" role="button" aria-label="View ${esc(p.name)} profile" data-act="open" data-id="${p.id}"><div class="cover" style="background:linear-gradient(135deg,${hue[p.cat]})"><span>${esc(p.cat)}</span></div><div class="cb"><h3>${esc(p.name)}</h3><div class="mute sm">${esc(p.tag)}</div><div class="provider-tags">${p.tags.slice(0,3).map(t=>`<span>${esc(t)}</span>`).join("")}</div><div class="row"><span>${ratingLabel(p)}</span><span>from ${peso(p.rate)}</span></div><div class="mute sm" style="margin-top:9px">${esc(p.city)} · ${p.bookingCount||0} requests</div></div></div>`).join(""):`<div class="empty">No creatives match that search. Try another category or clear the search box.</div>`}
 function browse(){return `<main class="home">
 <section class="hero"><div class="wrap hero-inner"><div class="hero-copy"><span class="eyebrow">Creativo · Local talent, all in one place</span><h1>Find the perfect creative team for your event.</h1><p>Discover photographers, videographers, and event organizers around Surigao. Compare local services and send a booking request in minutes.</p>
 <div class="hero-search"><span class="search-icon" aria-hidden="true">⌕</span><input id="q" aria-label="Search creatives" placeholder="Search a name, town, or specialty" value="${esc(S.q)}"><button class="btn" data-act="scroll" data-target="services">Find a creative</button></div>
 <div class="hero-cats">${cats.slice(1).map(c=>`<button data-act="cat" data-c="${c}">${c}</button>`).join("")}</div></div>
 <div class="hero-art" aria-hidden="true"><div class="art-frame"><div class="art-sun"></div><div class="art-hill"></div><div class="art-caption"><b>Made for your moments</b><span>Creative services, close to home</span></div></div><div class="art-stamp"><b>${S.P.length} local creatives</b><span>Ready to be discovered</span></div></div></div></section>
 <section class="section" id="services"><div class="wrap"><div class="section-head"><div><span class="section-kicker">Explore Creativo</span><h2>Find your kind of creative.</h2><p>Browse local talent and choose the right fit for your next event.</p></div><span class="mute sm">${S.P.length} ${S.P.length===1?"creative":"creatives"} listed</span></div>
-<div class="service-tools">${cats.map(c=>`<button class="chip${S.cat===c?" on":""}" data-act="cat" data-c="${c}">${c==="All"?"All services":c}</button>`).join("")}</div>
+<div class="service-tools">${cats.map(c=>`<button class="chip${S.cat===c?" on":""}" data-act="cat" data-c="${c}">${c==="All"?"All services":c}</button>`).join("")}<label class="mute sm" for="provider-sort">Rank by</label><select id="provider-sort" aria-label="Rank providers"><option value="popular"${S.sortBy==="popular"?" selected":""}>Most requested</option><option value="rated"${S.sortBy==="rated"?" selected":""}>Top rated</option><option value="newest"${S.sortBy==="newest"?" selected":""}>Newest</option></select></div>
 <div class="grid" id="grid">${cards()}</div></div></section>
 <section class="section how"><div class="wrap"><span class="section-kicker">Simple by design</span><h2>From idea to booked.</h2><p class="mute">A clearer way to find and connect with local creative professionals.</p><div class="steps">
 <article class="step"><div class="step-number">01</div><h3>Browse & discover</h3><p>Explore local photographers, videographers, and event organizers.</p></article>
@@ -269,9 +284,11 @@ function browse(){return `<main class="home">
 </div></div></section>
 <section class="creative-cta"><div class="wrap"><div class="cta-box"><div><span class="eyebrow">For local creatives</span><h2>Let more people discover your work.</h2><p>Create a provider profile and start receiving booking requests.</p></div><button class="btn" data-act="providerSignup">Join as a provider</button></div></div></section>
 <footer><div class="wrap">Creativo · Connecting Surigao with local creative talent<br><span class="mute sm">© 2026 Creativo. All rights reserved.</span></div></footer></main>`}
-function detail(){const p=find(S.sel);if(!p)return browse();return `<div class="wrap pg"><button class="btn alt sm back" data-act="go" data-v="browse">Back to browse</button>${banner()}
+function detail(){const p=find(S.sel);if(!p)return browse();const ownProfile=S.user?.providerId===p.id;return `<div class="wrap pg"><button class="btn alt sm back" data-act="go" data-v="browse">Back to browse</button>${banner()}
 <div class="two"><div><h1 style="font-size:clamp(30px,5vw,46px)">${esc(p.name)}</h1><div class="mute" style="margin-top:6px">${esc(p.cat)} in ${esc(p.city)} · ${ratingLabel(p)}</div>
-<div class="big" style="background:linear-gradient(135deg,${hue[p.cat]})"></div><p>${esc(p.about)}</p><div class="tags">${p.tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div></div>
+<div class="big" style="background:linear-gradient(135deg,${hue[p.cat]})"></div><p>${esc(p.about)}</p><div class="tags">${p.tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div>
+${p.socialLinks&&Object.keys(p.socialLinks).length?`<div class="social-links" aria-label="Provider links">${socialFields.filter(([key])=>p.socialLinks[key]).map(([key,label])=>`<a class="social-link" href="${esc(p.socialLinks[key])}" target="_blank" rel="noopener noreferrer">${label}</a>`).join("")}</div>`:""}
+${!ownProfile?`<section class="panel profile-card" style="margin-top:18px"><button class="btn bad sm" data-act="report">Report profile</button>${S.reporting?`<form data-form="profile-report"><label for="report-reason">Reason for report</label><select id="report-reason" name="reason" required><option value="">Choose a reason</option><option>Fake or misleading profile</option><option>Inappropriate content</option><option>Scam or suspicious behavior</option><option>Other</option></select><label for="report-details">Additional details (optional)</label><textarea id="report-details" name="details" rows="3" maxlength="1000" placeholder="Tell us what happened"></textarea><div class="profile-actions"><button class="btn alt" type="button" data-act="cancelReport">Cancel</button><button class="btn bad" type="button" data-act="submitReport">Submit report</button></div></form>`:""}</section>`:""}</div>
 <div class="panel"><h3 style="font-size:22px">Request a booking</h3><div class="mute sm" style="margin-top:4px">From ${peso(p.rate)} per session. You pay only after ${esc(p.name)} accepts.</div>
 <label for="d">Date</label><input id="d" type="date" min="${today}">
 <label for="n">What do you need?</label><textarea id="n" rows="4" maxlength="500" placeholder="Event type, location, number of guests"></textarea>
@@ -282,13 +299,25 @@ ${S.role==="admin"?`<p class="mute sm">Admin signup is limited to the configured
 <label for="em">Email</label><input id="em" type="email" autocomplete="email"><label for="pw">Password</label><input id="pw" type="password" autocomplete="${up?"new-password":"current-password"}" placeholder="At least 6 characters">
 <div style="margin-top:18px"><button class="btn" style="width:100%" data-act="auth">${up?"Create account":"Sign in"}</button></div>
 <div style="margin-top:14px;text-align:center"><button class="lnk" data-act="mode">${up?"I already have an account":"Create a new account"}</button></div></div></div>`}
+function profileSettings(){const u=S.user;if(!u)return auth();return `<main class="wrap pg">${banner()}<h1 style="font-size:clamp(30px,5vw,44px)">Profile settings</h1><p class="mute">Update your account details, password, and appearance.</p>
+<div class="profile-grid" style="margin-top:18px"><section class="panel profile-card"><h2>Account details</h2><p class="mute sm">Account type: ${u.isAdmin?"Admin":u.role==="provider"?"Provider":"Client"}</p>
+<form data-form="profile"><label for="profile-name">Account name</label><input id="profile-name" name="name" autocomplete="name" maxlength="80" required value="${esc(u.name)}">
+${u.role==="provider"?`<div class="profile-help">Your public business name is managed separately in Dashboard → Edit listing.</div>`:""}
+<label for="profile-email">Email</label><input id="profile-email" name="email" type="email" autocomplete="email" required value="${esc(u.email)}"${u.isAdmin?" disabled":""}>
+${u.isAdmin?`<div class="profile-help">The admin email is controlled by the server’s ADMIN_EMAIL setting.</div>`:""}
+<label for="profile-current-password">Current password <span class="mute sm">(needed to change email or password)</span></label><input id="profile-current-password" name="currentPassword" type="password" autocomplete="current-password">
+<label for="profile-new-password">New password <span class="mute sm">(leave blank to keep your current password)</span></label><input id="profile-new-password" name="password" type="password" minlength="6" autocomplete="new-password" placeholder="At least 6 characters">
+<label for="profile-confirm-password">Confirm new password</label><input id="profile-confirm-password" type="password" minlength="6" autocomplete="new-password">
+<div class="profile-actions"><button class="btn" type="button" data-act="saveProfile">Save changes</button></div></form></section>
+<div><section class="panel profile-card"><h2>Appearance</h2><p class="mute sm">Choose the theme that is easiest for you to read.</p><button class="btn alt" data-act="theme">${S.theme==="dark"?"Switch to light mode ☀":"Switch to dark mode ☾"}</button></section>
+<section class="panel profile-card" style="margin-top:16px"><h2>Booking history</h2><p class="mute sm">${u.role==="provider"?"Review booking requests and their current status.":"Review your booking requests, responses, and ratings."}</p><button class="btn alt" data-act="go" data-v="bookings">View booking history</button></section></div></div></main>`}
 function providerDashboard(){
 const p=find(S.user.providerId)||{name:S.user.name,cat:"Photography",city:"",rate:0,rating:"New",tag:"",about:"",tags:[]};
 const demo=S.user.email==="lumen@demo.ph";
 const total=demo?42:S.bk.length,accepted=S.bk.filter(b=>b.status==="Accepted").length;
 const revenue=demo?417000:accepted*p.rate,average=demo?Math.round(revenue/total):(accepted?Math.round(revenue/accepted):0);
 const tab=S.dashTab;
-const tabs=[["overview","Overview"],["bookings","Bookings"],["reviews","Reviews"]];
+const tabs=[["overview","Overview"],["bookings","Booking history"],["reviews","Reviews"]];
 const chart=`<svg class="dash-chart" viewBox="0 0 520 205" role="img" aria-label="Illustrative monthly revenue and booking chart">
 <g stroke="var(--line)" stroke-width="1"><path d="M48 22H500M48 62H500M48 102H500M48 142H500M48 182H500"/></g>
 <g fill="var(--mute)" font-size="10"><text x="4" y="25">₱100k</text><text x="10" y="65">₱75k</text><text x="10" y="105">₱50k</text><text x="10" y="145">₱25k</text><text x="21" y="185">₱0</text>
@@ -297,7 +326,7 @@ const chart=`<svg class="dash-chart" viewBox="0 0 520 205" role="img" aria-label
 <path d="M50 158L136 134L222 79L308 132L394 115L480 68" fill="none" stroke="#f1ad32" stroke-width="2.5" stroke-dasharray="5 4"/>
 <g fill="#382b70"><circle cx="50" cy="145" r="4"/><circle cx="136" cy="111" r="4"/><circle cx="222" cy="43" r="4"/><circle cx="308" cy="107" r="4"/><circle cx="394" cy="85" r="4"/><circle cx="480" cy="24" r="4"/></g>
 <g fill="#f1ad32"><circle cx="50" cy="158" r="3"/><circle cx="136" cy="134" r="3"/><circle cx="222" cy="79" r="3"/><circle cx="308" cy="132" r="3"/><circle cx="394" cy="115" r="3"/><circle cx="480" cy="68" r="3"/></g></svg>`;
-const listForm=()=>`<div class="dash-panel dash-section"><h2>Edit your listing</h2><form class="listing-form" data-form="listing">
+const listForm=()=>`<div class="dash-panel dash-section"><h2>Edit your listing</h2><p class="mute sm">Add public links where customers can see your work or learn more about your services.</p><form class="listing-form" data-form="listing">
 <div><label for="listing-name">Business name</label><input id="listing-name" name="name" maxlength="80" required value="${esc(p.name)}"></div>
 <div><label for="listing-category">Category</label><select id="listing-category" name="cat">${cats.slice(1).map(c=>`<option${p.cat===c?" selected":""}>${c}</option>`).join("")}</select></div>
 <div><label for="listing-city">City</label><input id="listing-city" name="city" maxlength="100" required value="${esc(p.city)}"></div>
@@ -305,6 +334,7 @@ const listForm=()=>`<div class="dash-panel dash-section"><h2>Edit your listing</
 <div class="full"><label for="listing-tag">Short service description</label><input id="listing-tag" name="tag" maxlength="160" required value="${esc(p.tag)}"></div>
 <div class="full"><label for="listing-about">About your services</label><textarea id="listing-about" name="about" rows="4" maxlength="1000" required>${esc(p.about)}</textarea></div>
 <div class="full"><label for="listing-tags">Specialties (comma-separated)</label><input id="listing-tags" name="tags" maxlength="400" required value="${esc(p.tags.join(", "))}"></div>
+${socialFields.map(([key,label])=>`<div><label for="listing-${key}">${label} link</label><input id="listing-${key}" name="social_${key}" type="url" maxlength="500" placeholder="https://" value="${esc(p.socialLinks?.[key]||"")}"></div>`).join("")}
 </form><div class="listing-form-actions"><button class="btn alt" data-act="cancelListing">Cancel</button><button class="btn" data-act="saveListing">Save listing</button></div></div>`;
 const bookingRows=S.bk.length?S.bk.map(b=>`<div class="dash-booking"><div><b>${esc(b.clientName)}</b><div class="mute sm">${esc(b.date)} · ${esc(b.note)}</div>${b.status==="Accepted"?`<div class="mute sm">Client email: ${b.contactEmail?`<a href="mailto:${esc(b.contactEmail)}">${esc(b.contactEmail)}</a>`:"Not available"}</div>`:""}</div><span class="st ${b.status}">${esc(b.status)}</span>${b.status==="Pending"?`<div class="acts"><button class="btn sm" data-act="set" data-id="${b.id}" data-s="Accepted">Accept</button><button class="btn bad sm" data-act="set" data-id="${b.id}" data-s="Declined">Decline</button></div>`:"<span></span>"}</div>`).join(""):`<div class="empty">No booking requests yet. Share your listing to start receiving requests.</div>`;
 const reviews=demo?`<div class="dash-review"><b>Alex R.</b> <span class="mute sm">★★★★★ · Sample review</span><p>Wonderful to work with. The photos captured every special moment.</p></div><div class="dash-review"><b>Jamie C.</b> <span class="mute sm">★★★★★ · Sample review</span><p>Professional, friendly, and delivered beautiful photos quickly.</p></div>`:p.reviewCount?`<div class="dash-review"><b>${esc(p.rating)} ★</b><span class="mute sm"> · ${p.reviewCount} client ${p.reviewCount===1?"rating":"ratings"}</span><p>Your average rating from accepted bookings.</p></div>`:`<div class="empty">Client ratings will appear here after an accepted booking is rated.</div>`;
@@ -333,6 +363,10 @@ data=rows.filter(r=>(r.name+r.email+r.role+r.created).toLowerCase().includes(que
 headers=["Provider","Category","City","Starting rate","Account email","Rating"];
 data=rows.filter(r=>(r.name+r.cat+r.city+(r.accountEmail||"")+r.rating).toLowerCase().includes(query))
   .map(r=>[esc(r.name),esc(r.cat),esc(r.city),peso(r.rate),esc(r.accountEmail||"No linked account"),esc(r.rating)]);
+}else if(S.adminTab==="reports"){
+headers=["Provider","Reported by","Reason","Details","Status","Reported","Review"];
+data=rows.filter(r=>(r.providerName+r.reporterName+r.reporterEmail+r.reason+r.details+r.status).toLowerCase().includes(query))
+  .map(r=>[esc(r.providerName),`${esc(r.reporterName)}<div class="mute sm">${esc(r.reporterEmail)}</div>`,esc(r.reason),esc(r.details||"—"),`<span class="st ${r.status==="Open"?"Pending":r.status==="Reviewed"?"Accepted":"Cancelled"}">${esc(r.status)}</span>`,esc(r.created||"—"),r.status==="Open"?`<div class="acts"><button class="btn sm" data-act="resolveReport" data-id="${esc(r.id)}" data-status="Reviewed">Reviewed</button><button class="btn bad sm" data-act="resolveReport" data-id="${esc(r.id)}" data-status="Dismissed">Dismiss</button></div>`:"—"]);
 }else if(S.adminTab==="messages"){
 const messages=rows.filter(r=>(r.senderName+r.senderEmail+r.senderRole+r.subject+r.message+r.created).toLowerCase().includes(query));
 return messages.length?messages.map(m=>`<article class="admin-message"><div class="row" style="margin-top:0"><b>${esc(m.senderName)} · ${m.senderRole==="consumer"?"Client":"Provider"}</b><span class="mute sm">${esc(m.created)}</span></div><div class="mute sm">${esc(m.senderEmail)}</div><h3>${esc(m.subject)}</h3><p>${esc(m.message)}</p></article>`).join(""):`<div class="empty">${query?"No matching messages.":"No messages yet."}</div>`;
@@ -346,31 +380,32 @@ return data.length?`<table class="admin-table"><thead><tr>${headers.map(h=>`<th>
 function adminDashboard(){
 if(!S.user?.isAdmin)return S.user?bookings():auth();
 const overview=S.adminOverview, counts=overview?.counts;
-const tabs=[["overview","Overview"],["users","People"],["providers","Providers"],["bookings","Bookings"],["messages",`Messages${counts?.totalMessages?` (${counts.totalMessages})`:""}`]];
+const tabs=[["overview","Overview"],["users","People"],["providers","Providers"],["bookings","Bookings"],["messages",`Messages${counts?.totalMessages?` (${counts.totalMessages})`:""}`],["reports",`Reports${counts?.openReports?` (${counts.openReports})`:""}`]];
 const tabButtons=tabs.map(([id,label])=>`<button class="dash-tab${S.adminTab===id?" on":""}" role="tab" aria-selected="${S.adminTab===id}" data-act="adminTab" data-tab="${id}">${label}</button>`).join("");
 let content="";
 if(S.adminTab==="overview"&&counts){
-const kpis=[["Accounts",counts.totalUsers],["Clients",counts.totalClients],["Provider profiles",counts.totalProviders],["Bookings",counts.totalBookings],["Pending bookings",counts.pendingBookings],["Messages",counts.totalMessages]];
+const kpis=[["Accounts",counts.totalUsers],["Clients",counts.totalClients],["Provider profiles",counts.totalProviders],["Bookings",counts.totalBookings],["Pending bookings",counts.pendingBookings],["Messages",counts.totalMessages],["Open reports",counts.openReports]];
 content=`<div class="dash-kpis">${kpis.map(([label,value])=>`<article class="dash-kpi"><div class="dash-kpi-label">${label}</div><div class="dash-kpi-value">${value}</div></article>`).join("")}</div>
 <div class="dash-charts">
 <section class="dash-panel"><h2>Recently joined</h2>${overview.recentUsers.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Name</th><th>Email</th><th>Type</th><th>Joined</th></tr></thead><tbody>${overview.recentUsers.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(u.email)}</td><td>${u.isAdmin?"Admin":u.role==="consumer"?"Client":"Provider"}</td><td>${esc(u.created||"—")}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">No accounts yet.</div>`}</section>
 <section class="dash-panel"><h2>Recent bookings</h2>${overview.recentBookings.length?overview.recentBookings.map(b=>`<div class="dash-booking"><div><b>${esc(b.clientName)}</b><div class="mute sm">${esc(b.providerName)} · ${esc(b.date)}</div></div><span class="st ${esc(b.status)}">${esc(b.status)}</span></div>`).join(""):`<div class="empty">No bookings yet.</div>`}</section></div>`;
 }else{
-const title={users:"People",providers:"Provider profiles",bookings:"Bookings",messages:"Messages from clients and providers"}[S.adminTab];
-content=`<section class="dash-panel"><div class="admin-tools"><h2>${title}</h2><input class="admin-search" id="admin-search" type="search" placeholder="Search ${title.toLowerCase()}" value="${esc(S.adminSearch)}" aria-label="Search ${title.toLowerCase()}"></div><div class="${S.adminTab==="messages"?"":"admin-table-wrap"}" id="admin-table">${adminTableBody()}</div></section>`;
+const title={users:"People",providers:"Provider profiles",bookings:"Bookings",messages:"Messages from clients and providers",reports:"Profile reports"}[S.adminTab];
+content=`<section class="dash-panel"><div class="admin-tools"><h2>${title}</h2><input class="admin-search" id="admin-search" type="search" placeholder="Search ${title.toLowerCase()}" value="${esc(S.adminSearch)}" aria-label="Search ${title.toLowerCase()}"></div><div class="admin-table-wrap" id="admin-table">${adminTableBody()}</div></section>`;
 }
 return `<main class="dash"><section class="dash-banner"><div class="wrap"><div class="dash-top"><div><span class="eyebrow">Creativo administration</span><h1>Admin dashboard</h1><div class="mute">Marketplace overview and account activity</div></div><div class="dash-actions"><button class="btn alt sm" data-act="go" data-v="browse">Marketplace</button></div></div><div class="dash-tabs" role="tablist">${tabButtons}</div></div></section><div class="wrap dash-content">${banner()}${content}</div></main>`;
 }
 function bookings(){const u=S.user;if(!u)return auth();
 if(u.role==="provider")return providerDashboard();
-return `<div class="wrap pg">${banner()}<h1 style="font-size:clamp(30px,5vw,44px)">My bookings</h1>
+return `<div class="wrap pg">${banner()}<h1 style="font-size:clamp(30px,5vw,44px)">Booking history</h1>
 <div class="panel" style="margin-top:18px">${S.bk.length?S.bk.map(b=>`<div class="bk"><div><b>${esc(b.providerName)}</b> <span class="st ${esc(b.status)}">${esc(b.status)}</span><div class="mute sm">${esc(b.date)} · ${esc(b.note)}</div>${b.status==="Accepted"?`<div class="mute sm">Provider email: ${b.contactEmail?`<a href="mailto:${esc(b.contactEmail)}">${esc(b.contactEmail)}</a>`:"Not available"}</div>`:""}</div>${b.status==="Pending"?`<button class="btn bad sm" data-act="set" data-id="${b.id}" data-s="Cancelled">Cancel</button>`:b.status==="Accepted"&&!b.rating?`<form class="rating-form" id="rating-form-${b.id}"><label for="rating-${b.id}">Rate this creative</label><select id="rating-${b.id}" name="rating" required><option value="">Choose stars</option><option value="5">★★★★★ · Excellent</option><option value="4">★★★★ · Good</option><option value="3">★★★ · Okay</option><option value="2">★★ · Poor</option><option value="1">★ · Very poor</option></select><button class="btn sm" type="button" data-act="rate" data-id="${b.id}">Submit rating</button></form>`:b.rating?`<div class="rating-done">Your rating: ${"★".repeat(b.rating)}${"☆".repeat(5-b.rating)}</div>`:""}</div>`).join(""):`<div class="mute">You have no bookings yet. Browse creatives and send your first request.</div>`}</div>
 <div style="margin-top:16px"><button class="btn" data-act="go" data-v="browse">Browse creatives</button></div></div>`}
 function contactAdmin(){if(!S.user||S.user.isAdmin)return auth();return `<main class="wrap pg" style="max-width:720px">${banner()}<section class="panel"><span class="eyebrow">We’re here to help</span><h1 style="font-size:clamp(30px,5vw,44px);margin-top:8px">Contact the admin team</h1><p class="mute">Ask a question or share feedback. Your name and account email will be included so the admin team can follow up.</p><form data-form="admin-message"><label for="message-subject">Subject</label><input id="message-subject" name="subject" maxlength="100" required placeholder="What can we help with?"><label for="message-body">Message</label><textarea id="message-body" name="message" rows="7" maxlength="2000" required placeholder="Type your question or message here"></textarea><div style="margin-top:16px"><button class="btn" type="button" data-act="sendMessage">Send message</button></div></form></section></main>`}
-function render(){const v=S.view;$("#app").innerHTML=nav()+(v==="browse"?browse():v==="detail"?detail():v==="auth"?auth():v==="admin"?adminDashboard():v==="contact"?contactAdmin():bookings())}
+function render(){const v=S.view;$("#app").innerHTML=nav()+(v==="browse"?browse():v==="detail"?detail():v==="auth"?auth():v==="admin"?adminDashboard():v==="contact"?contactAdmin():v==="settings"?profileSettings():bookings())}
 function saveToken(t){T=t;try{t?localStorage.setItem("cv_token",t):localStorage.removeItem("cv_token")}catch(e){}}
 function toggleTheme(){S.theme=S.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=S.theme;try{localStorage.setItem("cv_theme",S.theme)}catch(e){}render()}
 document.addEventListener("input",e=>{if(e.target.id==="q"){S.q=e.target.value;$("#grid").innerHTML=cards()}else if(e.target.id==="admin-search"){S.adminSearch=e.target.value;$("#admin-table").innerHTML=adminTableBody()}});
+document.addEventListener("change",e=>{if(e.target.id==="provider-sort"){S.sortBy=e.target.value;$("#grid").innerHTML=cards()}});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.classList.contains("card"))e.target.click()});
 document.addEventListener("click",async e=>{const t=e.target.closest("[data-act]");if(!t)return;const d=t.dataset,a=d.act,v=id=>($(id)||{}).value||"";
 try{
@@ -385,21 +420,46 @@ else if(a==="sendMessage"){
   await api("/messages",{method:"POST",body});
   S.msg=["ok","Your message was sent to the admin team."];render()
 }
+else if(a==="saveProfile"){
+  const form=$('[data-form="profile"]');
+  if(!form.reportValidity())return;
+  const body={name:v("#profile-name").trim(),email:v("#profile-email").trim(),currentPassword:v("#profile-current-password"),password:v("#profile-new-password")};
+  const confirmPassword=v("#profile-confirm-password");
+  if(body.password!==confirmPassword){S.msg=["err","The new passwords do not match."];render();return}
+  if(!body.password)delete body.password;
+  if(!body.currentPassword)delete body.currentPassword;
+  const updated=await api("/profile",{method:"PATCH",body});
+  S.user=updated.user;S.msg=["ok","Your profile settings were saved."];render()
+}
 else if(a==="listing"){S.listingEdit=!S.listingEdit;render()}
+else if(a==="report"){if(!S.user){S.after="report";S.mode="in";await go("auth");S.msg=["err","Sign in to report this profile. After signing in, the report form will open here."];render()}else{S.reporting=true;S.msg=null;render()}}
+else if(a==="cancelReport"){S.reporting=false;render()}
+else if(a==="submitReport"){
+  const form=$('[data-form="profile-report"]');
+  if(!form.reportValidity())return;
+  const body=Object.fromEntries(new FormData(form).entries());
+  await api("/providers/"+encodeURIComponent(S.sel)+"/report",{method:"POST",body});
+  S.reporting=false;S.msg=["ok","Thanks. Your report was sent to the admin team for review."];render()
+}
+else if(a==="resolveReport"){
+  await api("/admin/reports/"+encodeURIComponent(d.id),{method:"PATCH",body:{status:d.status}});
+  await loadAdminSection("reports");S.msg=["ok",`Report marked ${d.status.toLowerCase()}.`];render()
+}
 else if(a==="cancelListing"){S.listingEdit=false;render()}
 else if(a==="saveListing"){
   const form=$('[data-form="listing"]');
   if(!form.reportValidity())return;
   const fd=new FormData(form),body=Object.fromEntries(fd.entries());
   body.rate=Number(body.rate);body.tags=String(body.tags).split(",").map(tag=>tag.trim()).filter(Boolean);
+  body.socialLinks=Object.fromEntries(socialFields.map(([key])=>[key,String(fd.get("social_"+key)||"").trim()]).filter(([,url])=>url));
   const updated=await api("/provider/profile",{method:"PATCH",body});
-  S.P=S.P.map(p=>p.id===updated.id?updated:p);S.listingEdit=false;S.msg=["ok","Your listing was updated."];render()
+  S.P=S.P.map(p=>p.id===updated.id?{...p,...updated}:p);S.listingEdit=false;S.msg=["ok","Your listing was updated."];render()
 }
 else if(a==="signup"){S.mode="up";S.role="consumer";S.msg=null;await go("auth")}
 else if(a==="providerSignup"){S.mode="up";S.role="provider";S.msg=null;await go("auth")}
 else if(a==="scroll")document.getElementById(d.target)?.scrollIntoView({behavior:"smooth"});
 else if(a==="cat"){S.cat=d.c;render();if(t.closest(".hero"))document.getElementById("services")?.scrollIntoView({behavior:"smooth"})}
-else if(a==="open"){S.sel=d.id;await go("detail")}
+else if(a==="open"){S.sel=d.id;S.reporting=false;await go("detail")}
 else if(a==="out"){saveToken(null);S.user=null;S.bk=[];await go("browse")}
 else if(a==="mode"){S.mode=S.mode==="up"?"in":"up";S.msg=null;render()}
 else if(a==="role"){S.role=d.r;render()}
@@ -417,6 +477,7 @@ else if(a==="book"){
   const date=v("#d"),note=v("#n").trim();
   if(!date||!note){S.msg=["err","Choose a date and describe what you need."];render();return}
   await api("/bookings",{method:"POST",body:{providerId:S.sel,date,note}});
+  S.P=await api("/providers");
   S.view="bookings";await loadBk();S.msg=["ok","Request sent. The provider will reply here."];render();scrollTo(0,0)}
 else if(a==="auth"){
   const body={email:v("#em"),password:v("#pw")};
@@ -424,7 +485,7 @@ else if(a==="auth"){
   const r=await api(S.mode==="up"?"/signup":"/login",{method:"POST",body});
   saveToken(r.token);S.user=r.user;
   if(S.mode==="up"&&r.user.role==="provider")S.P=await api("/providers");
-  const next=r.user.isAdmin?"admin":r.user.role==="provider"?"bookings":(S.after||"browse");S.after=null;await go(next)}
+  const actionAfter=S.after;const next=r.user.isAdmin?"admin":actionAfter==="report"?"detail":r.user.role==="provider"?"bookings":actionAfter||"browse";S.after=null;if(actionAfter==="report"&&!r.user.isAdmin)S.reporting=true;await go(next)}
 }catch(err){fail(err)}});
 (async()=>{
   $("#app").innerHTML='<div class="wrap pg mute">Loading…</div>';

@@ -60,10 +60,12 @@ const db = initFirestore();
 const users = db.collection("users"), emailIndex = db.collection("emailIndex");
 const providers = db.collection("providers"), bookings = db.collection("bookings");
 const messages = db.collection("admin_messages"), reviews = db.collection("reviews");
+const profileReports = db.collection("profile_reports");
 const now = () => new Date().toISOString();
 const emailKey = email => crypto.createHash("sha256").update(email).digest("hex");
 const dataOf = snap => snap.exists ? { id: snap.id, ...snap.data() } : null;
 const list = async collection => (await collection.get()).docs.map(dataOf);
+const SOCIAL_LINKS = ["instagram", "facebook", "tiktok", "youtube", "website"];
 const isAdminUser = u => Boolean(ADMIN_EMAIL && u.email.toLowerCase() === ADMIN_EMAIL);
 const bad = (res, code, msg) => res.status(code).json({ error: msg });
 const sign = u => jwt.sign({ id: u.id }, SECRET, { expiresIn: "7d" });
@@ -86,7 +88,28 @@ async function providerOut(provider) {
     id: provider.id, name: provider.name, cat: provider.cat, city: provider.city,
     rate: provider.rate, rating: average === null ? provider.rating : average.toFixed(1),
     reviewCount: ratings.length, tag: provider.tag, about: provider.about, tags: provider.tags,
+    created: provider.created || "",
+    socialLinks: Object.fromEntries(SOCIAL_LINKS
+      .filter(key => typeof provider.socialLinks?.[key] === "string" && provider.socialLinks[key])
+      .map(key => [key, provider.socialLinks[key]])),
   };
+}
+function parseSocialLinks(value) {
+  const links = {};
+  const input = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  for (const key of SOCIAL_LINKS) {
+    const raw = String(input[key] || "").trim();
+    if (!raw) continue;
+    if (raw.length > 500) return { error: "Each social link must be 500 characters or fewer." };
+    let url;
+    try { url = new URL(raw); }
+    catch { return { error: `Enter a complete URL for ${key}.` }; }
+    if (!["http:", "https:"].includes(url.protocol) || !url.hostname || url.username || url.password) {
+      return { error: `Enter a valid http or https URL for ${key}.` };
+    }
+    links[key] = url.toString();
+  }
+  return { links };
 }
 async function bookingOut(booking, viewer) {
   const [providerSnap, reviewSnap] = await Promise.all([
@@ -95,18 +118,23 @@ async function bookingOut(booking, viewer) {
   const provider = dataOf(providerSnap);
   if (!provider) throw new Error(`Provider ${booking.providerId} for booking ${booking.id} was not found.`);
   let contactEmail = null;
-  if (booking.status === "Accepted") {
-    if (viewer.role === "provider") {
-      const clientSnap = await users.doc(booking.clientId).get();
-      contactEmail = clientSnap.exists ? clientSnap.data().email : null;
-    } else {
+  let clientName = booking.clientName;
+  if (viewer.role === "provider" && booking.clientId) {
+    const clientSnap = await users.doc(booking.clientId).get();
+    if (clientSnap.exists) {
+      clientName = clientSnap.data().name || clientName;
+      if (booking.status === "Accepted") contactEmail = clientSnap.data().email;
+    }
+  } else if (viewer.id === booking.clientId) {
+    clientName = viewer.name;
+    if (booking.status === "Accepted") {
       const providerUser = provider.userId ? await users.doc(provider.userId).get() : null;
       contactEmail = providerUser && providerUser.exists ? providerUser.data().email : null;
     }
   }
   return {
     id: booking.id, providerId: booking.providerId, providerName: provider.name,
-    clientName: booking.clientName, date: booking.date, note: booking.note,
+    clientName, date: booking.date, note: booking.note,
     status: booking.status, rating: reviewSnap.exists ? reviewSnap.data().rating : null,
     contactEmail,
   };
@@ -119,7 +147,7 @@ async function seedData() {
       const ref = providers.doc(String(index + 1));
       batch.set(ref, {
         name: s[0], cat: s[1], city: s[2], rate: s[3], rating: s[4],
-        tag: s[5], about: s[6], tags: s[7], userId: null,
+        tag: s[5], about: s[6], tags: s[7], userId: null, created: now(),
       });
     });
     await batch.commit();
@@ -156,6 +184,13 @@ async function seedData() {
       await batch.commit();
     }
   }
+  const existingProviders = await providers.get();
+  await Promise.all(existingProviders.docs.map(async providerSnap => {
+    const provider = providerSnap.data();
+    if (provider.created) return;
+    const account = provider.userId ? dataOf(await users.doc(provider.userId).get()) : null;
+    await providerSnap.ref.update({ created: account?.created || "2000-01-01T00:00:00.000Z" });
+  }));
 }
 
 function asyncRoute(handler) {
@@ -231,7 +266,7 @@ app.post("/api/signup", limit, asyncRoute(async (req, res) => {
         userId: userRef.id, name: n, cat: CATS.includes(category) ? category : "Photography",
         city: "Surigao City", rate: 2000, rating: "New", tag: "New on Creativo",
         about: "Say hello to your new profile. Add your story, packages and portfolio.",
-        tags: ["New"],
+        tags: ["New"], created: user.created,
       });
     });
   } catch (error) {
@@ -255,9 +290,56 @@ app.post("/api/login", limit, asyncRoute(async (req, res) => {
 
 app.get("/api/me", auth, asyncRoute(async (req, res) => res.json({ user: await userOut(req.user) })));
 
+app.patch("/api/profile", auth, asyncRoute(async (req, res) => {
+  const { name, email, currentPassword, password } = req.body || {};
+  const n = String(name || "").trim();
+  const e = String(email || "").trim().toLowerCase();
+  const nextPassword = String(password || "");
+  const emailChanged = e !== req.user.email;
+  if (!n || n.length > 80) return bad(res, 400, "Enter a name of 1 to 80 characters.");
+  if (!/^\S+@\S+\.\S+$/.test(e)) return bad(res, 400, "Enter a valid email address.");
+  if (nextPassword && nextPassword.length < 6) return bad(res, 400, "New password must be at least 6 characters.");
+  if (emailChanged && isAdminUser(req.user)) return bad(res, 403, "The admin email is managed by the server configuration.");
+  if ((emailChanged || nextPassword) &&
+      (!currentPassword || !bcrypt.compareSync(String(currentPassword), req.user.password))) {
+    return bad(res, 403, "Enter your current password to change your email or password.");
+  }
+  const userRef = users.doc(req.user.id);
+  const oldIndexRef = emailIndex.doc(emailKey(req.user.email));
+  const newIndexRef = emailIndex.doc(emailKey(e));
+  const updates = { name: n };
+  if (emailChanged) updates.email = e;
+  if (nextPassword) updates.password = bcrypt.hashSync(nextPassword, 10);
+  try {
+    await db.runTransaction(async transaction => {
+      const currentUserSnap = await transaction.get(userRef);
+      if (!currentUserSnap.exists) {
+        const error = new Error("Please sign in again.");
+        error.status = 401; throw error;
+      }
+      if (emailChanged) {
+        const newIndexSnap = await transaction.get(newIndexRef);
+        if (newIndexSnap.exists) {
+          const error = new Error("That email already has an account.");
+          error.status = 409; throw error;
+        }
+      }
+      transaction.update(userRef, updates);
+      if (emailChanged) {
+        transaction.delete(oldIndexRef);
+        transaction.create(newIndexRef, { userId: req.user.id });
+      }
+    });
+  } catch (error) {
+    if (error.status) return bad(res, error.status, error.message);
+    throw error;
+  }
+  res.json({ user: await userOut({ ...req.user, ...updates }) });
+}));
+
 app.get("/api/admin/overview", auth, adminOnly, asyncRoute(async (req, res) => {
-  const [allUsers, allProviders, allBookings, allMessages] = await Promise.all([
-    list(users), list(providers), list(bookings), list(messages),
+  const [allUsers, allProviders, allBookings, allMessages, allReports] = await Promise.all([
+    list(users), list(providers), list(bookings), list(messages), list(profileReports),
   ]);
   const recentUsers = allUsers.sort((a, b) => b.created.localeCompare(a.created)).slice(0, 6)
     .map(user => ({ id: user.id, name: user.name, email: user.email, role: user.role, created: user.created, isAdmin: isAdminUser(user) }));
@@ -278,6 +360,7 @@ app.get("/api/admin/overview", auth, adminOnly, asyncRoute(async (req, res) => {
       totalProviders: allProviders.length, totalBookings: allBookings.length,
       pendingBookings: allBookings.filter(booking => booking.status === "Pending").length,
       totalMessages: allMessages.length,
+      openReports: allReports.filter(report => report.status === "Open").length,
     },
     recentUsers, recentBookings,
   });
@@ -328,7 +411,34 @@ app.get("/api/admin/:section", auth, adminOnly, asyncRoute(async (req, res) => {
       };
     })));
   }
+  if (section === "reports") {
+    const rows = await list(profileReports);
+    rows.sort((a, b) => String(b.created || "").localeCompare(String(a.created || "")));
+    return res.json(await Promise.all(rows.map(async report => {
+      const [providerSnap, reporterSnap] = await Promise.all([
+        providers.doc(report.providerId).get(), users.doc(report.reporterId).get(),
+      ]);
+      const provider = dataOf(providerSnap), reporter = dataOf(reporterSnap);
+      return {
+        id: report.id, providerId: report.providerId,
+        providerName: provider ? provider.name : "Deleted profile",
+        reporterName: reporter ? reporter.name : "Deleted account",
+        reporterEmail: reporter ? reporter.email : "",
+        reason: report.reason, details: report.details, status: report.status, created: report.created,
+      };
+    })));
+  }
   return bad(res, 404, "Admin section not found.");
+}));
+
+app.patch("/api/admin/reports/:id", auth, adminOnly, asyncRoute(async (req, res) => {
+  const status = String((req.body || {}).status || "");
+  if (!["Reviewed", "Dismissed"].includes(status)) return bad(res, 400, "Choose Reviewed or Dismissed.");
+  const reportRef = profileReports.doc(req.params.id);
+  const reportSnap = await reportRef.get();
+  if (!reportSnap.exists) return bad(res, 404, "Profile report not found.");
+  await reportRef.update({ status, reviewed: now() });
+  res.json({ ok: true });
 }));
 
 app.post("/api/messages", auth, asyncRoute(async (req, res) => {
@@ -342,8 +452,18 @@ app.post("/api/messages", auth, asyncRoute(async (req, res) => {
 }));
 
 app.get("/api/providers", asyncRoute(async (req, res) => {
-  const rows = await list(providers);
-  res.json(await Promise.all(rows.map(providerOut)));
+  const [providerRows, bookingRows] = await Promise.all([list(providers), list(bookings)]);
+  const bookingCounts = new Map();
+  for (const booking of bookingRows) bookingCounts.set(booking.providerId, (bookingCounts.get(booking.providerId) || 0) + 1);
+  const result = await Promise.all(providerRows.map(async provider => {
+    const account = !provider.created && provider.userId ? dataOf(await users.doc(provider.userId).get()) : null;
+    return {
+      ...await providerOut(provider),
+      created: provider.created || account?.created || "",
+      bookingCount: bookingCounts.get(provider.id) || 0,
+    };
+  }));
+  res.json(result);
 }));
 app.get("/api/providers/:id", asyncRoute(async (req, res) => {
   const provider = dataOf(await providers.doc(req.params.id).get());
@@ -351,14 +471,42 @@ app.get("/api/providers/:id", asyncRoute(async (req, res) => {
   res.json(await providerOut(provider));
 }));
 
+app.post("/api/providers/:id/report", auth, limit, asyncRoute(async (req, res) => {
+  const providerRef = providers.doc(req.params.id), providerSnap = await providerRef.get();
+  if (!providerSnap.exists) return bad(res, 404, "Provider profile not found.");
+  const provider = dataOf(providerSnap);
+  if (provider.userId === req.user.id) return bad(res, 403, "You cannot report your own profile.");
+  const { reason, details } = req.body || {};
+  const allowedReasons = ["Fake or misleading profile", "Inappropriate content", "Scam or suspicious behavior", "Other"];
+  const reportReason = String(reason || "").trim();
+  const reportDetails = String(details || "").trim();
+  if (!allowedReasons.includes(reportReason)) return bad(res, 400, "Choose a report reason.");
+  if (reportDetails.length > 1000) return bad(res, 400, "Additional details must be 1000 characters or fewer.");
+  const reportId = crypto.createHash("sha256").update(`${provider.id}:${req.user.id}`).digest("hex");
+  const reportRef = profileReports.doc(reportId);
+  const result = await db.runTransaction(async transaction => {
+    const existing = await transaction.get(reportRef);
+    if (existing.exists) return { error: [409, "You have already reported this profile."] };
+    transaction.create(reportRef, {
+      providerId: provider.id, reporterId: req.user.id,
+      reason: reportReason, details: reportDetails, status: "Open", created: now(),
+    });
+    return { ok: true };
+  });
+  if (result.error) return bad(res, result.error[0], result.error[1]);
+  res.status(201).json({ ok: true });
+}));
+
 app.patch("/api/provider/profile", auth, asyncRoute(async (req, res) => {
   if (req.user.role !== "provider") return bad(res, 403, "Only providers can edit a listing.");
   const provider = await getProviderByUserId(req.user.id);
   if (!provider) return bad(res, 404, "Provider listing not found.");
-  const { name, cat, city, rate, tag, about, tags } = req.body || {};
+  const { name, cat, city, rate, tag, about, tags, socialLinks } = req.body || {};
   const n = String(name || "").trim().slice(0, 80), c = String(city || "").trim().slice(0, 100);
   const r = Number(rate), t = String(tag || "").trim().slice(0, 160), a = String(about || "").trim().slice(0, 1000);
   const ts = Array.isArray(tags) ? [...new Set(tags.map(x => String(x).trim().slice(0, 40)).filter(Boolean))].slice(0, 10) : [];
+  const parsedLinks = parseSocialLinks(socialLinks);
+  if (parsedLinks.error) return bad(res, 400, parsedLinks.error);
   if (!n) return bad(res, 400, "Enter a listing name.");
   if (!CATS.includes(cat)) return bad(res, 400, "Choose a valid category.");
   if (!c) return bad(res, 400, "Enter a city.");
@@ -366,8 +514,8 @@ app.patch("/api/provider/profile", auth, asyncRoute(async (req, res) => {
   if (!t) return bad(res, 400, "Add a short service description.");
   if (!a) return bad(res, 400, "Add an about description.");
   if (!ts.length) return bad(res, 400, "Add at least one specialty.");
-  await providers.doc(provider.id).update({ name: n, cat, city: c, rate: r, tag: t, about: a, tags: ts });
-  res.json(await providerOut({ ...provider, name: n, cat, city: c, rate: r, tag: t, about: a, tags: ts }));
+  await providers.doc(provider.id).update({ name: n, cat, city: c, rate: r, tag: t, about: a, tags: ts, socialLinks: parsedLinks.links });
+  res.json(await providerOut({ ...provider, name: n, cat, city: c, rate: r, tag: t, about: a, tags: ts, socialLinks: parsedLinks.links }));
 }));
 
 app.get("/api/bookings", auth, asyncRoute(async (req, res) => {
