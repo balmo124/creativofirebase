@@ -1,0 +1,25 @@
+{
+  "name": "creativo",
+  "version": "1.0.0",
+  "description": "Marketplace connecting clients with local photographers, videographers and event organizers",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "cross-env SEED_DEMO=1 node server.js"
+  },
+  "devDependencies": {
+    "cross-env": "^10.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.10.0",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
+}

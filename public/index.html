@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Creativo: book local creatives</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f5f2;--card:#fff;--ink:#0f2421;--mute:#5b6b67;--line:#dbe4df;--acc:#0b7a75;--acc-ink:#fff;--sun:#f5b82e;--ok:#1f8a4c;--warn:#a86a00;--bad:#b83a2e;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--bg:#0c1715;--card:#14221f;--ink:#e8f1ee;--mute:#93a8a2;--line:#233632;--acc:#3fc1b8;--acc-ink:#04201d;--ok:#5fd18c;--warn:#f0b24a;--bad:#ff8a7a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+h1,h2,h3{font-family:"Bricolage Grotesque",Inter,system-ui,sans-serif;line-height:1.1;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--line);z-index:5}
+.nr{display:flex;align-items:center;justify-content:space-between;height:58px;gap:10px}
+.logo{font:800 22px "Bricolage Grotesque",sans-serif;cursor:pointer;letter-spacing:-.02em}
+.logo i{color:var(--acc);font-style:normal}
+nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.lnk{background:none;border:0;color:var(--ink);font:500 14px Inter,sans-serif;padding:8px 10px;border-radius:8px;cursor:pointer}
+.lnk:hover,.lnk.on{background:var(--line)}
+.btn{background:var(--acc);color:var(--acc-ink);border:0;border-radius:10px;padding:11px 18px;font:500 15px Inter,sans-serif;cursor:pointer}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:7px 12px;font-size:13px}.btn.bad{background:transparent;color:var(--bad);border:1px solid var(--line)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.card:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.hero{padding:44px 0 22px}
+.hero h1{font-size:clamp(34px,7vw,64px);font-weight:800;letter-spacing:-.03em;max-width:15ch}
+.hero p{color:var(--mute);max-width:52ch;margin:14px 0 22px;font-size:17px}
+.search{display:flex;gap:10px;flex-wrap:wrap}
+input,select,textarea{width:100%;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font:400 15px Inter,sans-serif}
+.search input{flex:1 1 260px;width:auto}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 22px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:7px 15px;font:500 14px Inter,sans-serif;cursor:pointer}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;padding-bottom:50px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer}
+.card:hover{border-color:var(--acc)}
+.cover{height:96px;position:relative}
+.cover span{position:absolute;left:12px;bottom:10px;background:var(--card);color:var(--ink);font-size:12px;font-weight:500;padding:3px 9px;border-radius:99px}
+.cb{padding:14px 15px 16px}.cb h3{font-size:19px;margin-bottom:4px}
+.mute{color:var(--mute)}.sm{font-size:13px}
+.row{display:flex;justify-content:space-between;margin-top:12px;font-size:14px;font-weight:500}
+.empty{grid-column:1/-1;padding:34px;border:1px dashed var(--line);border-radius:14px;color:var(--mute);text-align:center}
+.pg{padding:26px 0 60px}
+.two{display:grid;grid-template-columns:1.3fr 1fr;gap:26px;align-items:start}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.big{height:150px;border-radius:14px;margin:16px 0}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.tags span{background:var(--line);border-radius:99px;padding:3px 11px;font-size:13px}
+label{display:block;font-size:14px;font-weight:500;margin:14px 0 5px}
+.seg{display:flex;gap:8px}.seg .chip{flex:1;text-align:center;border-radius:10px}
+.msg{padding:11px 14px;border-radius:10px;margin-bottom:14px;font-size:14px;background:var(--line)}
+.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.stats .panel b{display:block;font:800 30px "Bricolage Grotesque",sans-serif}
+.bk{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:15px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.bk:first-child{border-top:0}
+.st{font-size:13px;font-weight:500}.st.Pending{color:var(--warn)}.st.Accepted{color:var(--ok)}.st.Declined,.st.Cancelled{color:var(--bad)}
+.acts{display:flex;gap:8px}
+.demo{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.back{margin-bottom:14px}
+:root{--bg:#f7f5f0;--card:#fff;--ink:#17243a;--mute:#687386;--line:#e4e6e9;--acc:#e9813c;--acc-ink:#fff;--sun:#f5b82e;--ok:#1f8a4c;--warn:#a86a00;--bad:#b83a2e;color-scheme:light}
+header{background:var(--bg);backdrop-filter:blur(14px);border-color:var(--line)}
+.wrap{max-width:1160px;padding:0 24px}
+.nr{height:72px}
+.logo{font-size:25px}
+.logo i{color:var(--acc)}
+nav{gap:10px}
+.lnk{padding:9px 13px;border-radius:999px}
+.lnk:hover,.lnk.on{background:#f2eee8}
+.btn{background:var(--acc);border-radius:999px;padding:12px 20px;font-weight:600;transition:transform .18s ease,background .18s ease}
+.btn:hover{background:#d96e2e;transform:translateY(-1px)}
+.btn.alt{border-radius:999px}
+.hero{position:relative;overflow:hidden;background:#142039;color:#fff;padding:76px 0 64px}
+.hero::before,.hero::after{content:"";position:absolute;pointer-events:none;border-radius:50%}
+.hero::before{width:440px;height:440px;right:-110px;top:-210px;background:radial-gradient(circle,#ec8a49 0,rgba(236,138,73,.2) 45%,transparent 70%)}
+.hero::after{width:520px;height:520px;right:9%;bottom:-430px;border:1px solid rgba(255,255,255,.15);box-shadow:0 0 0 38px rgba(255,255,255,.025),0 0 0 78px rgba(255,255,255,.025)}
+.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(270px,.85fr);align-items:center;gap:44px}
+.hero-copy{max-width:680px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:#edaa79;font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase}
+.hero h1{font-size:clamp(42px,6.7vw,72px);max-width:12ch;line-height:1.02;letter-spacing:-.045em;margin-top:17px}
+.hero p{color:#d1d8e2;max-width:54ch;margin:18px 0 25px;font-size:17px}
+.hero-search{display:flex;align-items:center;gap:10px;padding:7px;background:#fff;border-radius:999px;max-width:610px;box-shadow:0 16px 40px rgba(0,0,0,.2)}
+.hero-search .search-icon{padding-left:12px;color:#7a8492;font-size:21px}
+input,select,textarea{border-radius:12px}
+.hero-search input{border:0;box-shadow:none;padding:11px 4px;color:#17243a;min-width:0}
+.hero-search input:focus-visible{outline:none}
+.hero-search .btn{flex:none;padding:11px 19px}
+.hero-cats{display:flex;flex-wrap:wrap;gap:10px;margin-top:19px}
+.hero-cats button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:999px;padding:8px 13px;font:500 13px Inter,sans-serif;cursor:pointer}
+.hero-cats button:hover{background:rgba(255,255,255,.16)}
+.hero-art{position:relative;min-height:310px;display:grid;place-items:center}
+.art-frame{position:relative;width:min(100%,360px);height:300px;border:1px solid rgba(255,255,255,.23);border-radius:30px;background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.035));transform:rotate(3deg);box-shadow:0 30px 70px rgba(0,0,0,.24);overflow:hidden}
+.art-sun{position:absolute;width:182px;height:182px;border-radius:50%;right:25px;top:24px;background:linear-gradient(135deg,#f5be62,#e87947);box-shadow:0 0 60px rgba(239,149,74,.24)}
+.art-hill{position:absolute;bottom:-45px;width:115%;height:185px;left:-7%;border-radius:50% 50% 0 0;background:linear-gradient(140deg,#61aaa0,#226b72)}
+.art-hill::after{content:"";position:absolute;inset:30px -35px auto 44%;height:165px;border-radius:50% 50% 0 0;background:linear-gradient(140deg,#274d62,#172b43)}
+.art-caption{position:absolute;left:22px;bottom:20px;z-index:1;color:#fff}
+.art-caption b{display:block;font:700 21px "Bricolage Grotesque",sans-serif}
+.art-caption span{font-size:12px;color:#e3e8ec}
+.art-stamp{position:absolute;z-index:2;left:-18px;top:44px;background:#fff;color:#17243a;padding:13px 16px;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.22);transform:rotate(-5deg)}
+.art-stamp b{display:block;font:700 16px "Bricolage Grotesque",sans-serif}
+.art-stamp span{font-size:11px;color:#687386}
+.section{padding:68px 0}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:24px}
+.section-head h2,.how h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.03em}
+.section-head p{margin:8px 0 0;color:var(--mute)}
+.section-kicker{display:block;color:var(--acc);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.service-tools{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:23px}
+.service-tools .chip{padding:9px 16px}
+.grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding-bottom:0}
+.card{border-color:var(--line);border-radius:18px;box-shadow:0 5px 18px rgba(24,38,57,.045);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.card:hover{border-color:#e6a47b;transform:translateY(-4px);box-shadow:0 14px 30px rgba(24,38,57,.1)}
+.cover{height:150px;overflow:hidden}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(12,24,39,.32))}
+.cover span{z-index:1;left:14px;bottom:13px;background:rgba(255,255,255,.94);padding:5px 11px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.cb{padding:17px 18px 19px}
+.cb h3{font-size:21px}
+.cb .row{margin-top:17px;padding-top:13px;border-top:1px solid var(--line)}
+.provider-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
+.provider-tags span{font-size:11px;padding:4px 8px;border-radius:999px;background:var(--line);color:var(--mute)}
+.empty{background:var(--card);border-color:var(--line)}
+.how{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px}
+.step{position:relative;padding:22px 19px;border:1px solid var(--line);border-radius:17px;background:var(--card)}
+.step-number{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#fff0e5;color:#d96e2e;font-weight:700;margin-bottom:17px}
+.step h3{font-size:19px;margin-bottom:8px}
+.step p{margin:0;color:var(--mute);font-size:14px}
+.creative-cta{padding:50px 0}
+.cta-box{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:36px 40px;border-radius:24px;background:#142039;color:#fff;overflow:hidden}
+.cta-box h2{font-size:clamp(26px,4vw,38px);max-width:17ch}
+.cta-box p{color:#cbd3de;margin:10px 0 0}
+.cta-box .btn{background:#f2a267;color:#17243a;white-space:nowrap}
+footer{padding:24px 0;border-top:1px solid var(--line);color:var(--mute);font-size:13px}
+.portal-head{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:24px;background:#142039;color:#fff;border-radius:20px}
+.portal-head h1{font-size:clamp(28px,4vw,40px);margin-top:6px}
+.portal-head .mute{color:#cbd3de}
+.stats .panel{border-radius:16px;box-shadow:0 5px 18px rgba(24,38,57,.045)}
+.stats .panel b{font-size:28px}
+.pg>.panel,.two .panel{border-radius:18px}
+.hero-search input{background:transparent;color:var(--ink);font-weight:500}
+.hero-search input::placeholder{color:var(--mute);opacity:1}
+.hero-search .search-icon{color:var(--mute)}
+.theme-toggle{width:40px;height:40px;padding:0;display:grid;place-items:center;border:1px solid var(--line);font-size:20px;line-height:1}
+:root[data-theme="dark"] .lnk:hover,:root[data-theme="dark"] .lnk.on{background:var(--line)}
+:root[data-theme="dark"] .hero-search{background:var(--card);border:1px solid var(--line)}
+:root[data-theme="dark"] .hero-search input{color:#f3f7f5}
+:root[data-theme="dark"] .hero-search input::placeholder{color:#b4c5bf}
+:root[data-theme="dark"] .hero-search .search-icon{color:#b4c5bf}
+.dash{padding-top:0}
+.dash-banner{background:linear-gradient(115deg,#121838,#32205e);color:#fff;padding:26px 0 0}
+.dash-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.dash-top h1{font-size:clamp(28px,4vw,38px);margin-top:5px}
+.dash-top .mute{color:#d1d8e2}
+.dash-actions{display:flex;gap:10px;align-items:center}
+.dash-actions .btn{background:#ffb21c;color:#241831}
+.dash-tabs{display:flex;gap:8px;margin-top:22px}
+.dash-tab{background:transparent;border:0;border-bottom:3px solid transparent;color:#d4d7e5;padding:11px 16px;font:500 14px Inter,sans-serif;cursor:pointer}
+.dash-tab.on{background:var(--card);border-radius:11px 11px 0 0;color:var(--ink);border-color:var(--card)}
+.dash-content{padding-top:20px}
+.dash-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:0 0 16px}
+.dash-kpi,.dash-panel{background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:0 4px 16px rgba(34,30,72,.055)}
+.dash-kpi{padding:16px;border-left:3px solid var(--acc)}
+.dash-kpi:nth-child(2){border-left-color:#6654be}.dash-kpi:nth-child(3){border-left-color:#11a28b}.dash-kpi:nth-child(4){border-left-color:#e4a927}
+.dash-kpi-label{display:flex;align-items:center;justify-content:space-between;color:var(--mute);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.dash-kpi-value{font:800 clamp(21px,3vw,30px)/1.2 "Bricolage Grotesque",sans-serif;margin-top:7px;white-space:nowrap}
+.dash-kpi-note{font-size:11px;color:var(--ok);margin-top:5px}
+.dash-charts{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(230px,.8fr);gap:14px}
+.dash-panel{padding:17px}
+.dash-panel h2{font-size:17px;margin-bottom:12px}
+.dash-chart{width:100%;height:auto;display:block}
+.chart-legend{display:flex;gap:20px;justify-content:center;color:var(--mute);font-size:11px;margin-top:4px}
+.legend-key{display:inline-flex;align-items:center;gap:6px}
+.legend-key i{width:13px;height:2px;background:#382b70}
+.legend-key.bookings i{background:#f1ad32}
+.mix-layout{display:flex;align-items:center;justify-content:center;gap:14px;min-height:145px}
+.mix-donut{width:116px;height:116px;border-radius:50%;background:conic-gradient(#382b70 0 42%,#ffb21c 42% 70%,#8a5ae0 70% 88%,#11a28b 88%);position:relative;flex:none}
+.mix-donut:after{content:"";position:absolute;inset:23px;border-radius:50%;background:var(--card)}
+.mix-legend{list-style:none;padding:0;margin:0;display:grid;gap:8px;color:var(--mute);font-size:11px}
+.mix-legend li{display:grid;grid-template-columns:8px 1fr auto;align-items:center;gap:6px}
+.mix-legend i{width:7px;height:7px;border-radius:50%;background:#382b70}
+.mix-legend li:nth-child(2) i{background:#ffb21c}.mix-legend li:nth-child(3) i{background:#8a5ae0}.mix-legend li:nth-child(4) i{background:#11a28b}
+.demo-note{font-size:11px;color:var(--mute);margin:10px 0 0}
+.dash-section{margin-top:14px}
+.dash-booking{display:grid;grid-template-columns:1fr auto auto;gap:15px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}
+.dash-booking:first-of-type{border-top:0}
+.dash-booking .btn{padding:7px 12px;font-size:12px}
+.rating-form{display:grid;grid-template-columns:1fr;gap:7px;min-width:170px}
+.rating-form label{margin:0;font-size:12px;font-weight:600}
+.rating-form select{min-width:170px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+.rating-done{color:var(--acc);font-size:14px;white-space:nowrap}
+.dash-review{padding:14px 0;border-top:1px solid var(--line)}
+.dash-review:first-of-type{border-top:0}
+.dash-review p{margin:5px 0;font-size:14px}
+.listing-form{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+.listing-form .full{grid-column:1/-1}
+.listing-form textarea{resize:vertical}
+.listing-form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.admin-tools{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.admin-search{max-width:360px}
+.admin-table-wrap{overflow-x:auto}
+.admin-table{width:100%;border-collapse:collapse;font-size:13px;text-align:left}
+.admin-table th,.admin-table td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.admin-table th{color:var(--mute);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.admin-table td{min-width:100px}
+.admin-table td:last-child{min-width:160px}
+.admin-table tr:last-child td{border-bottom:0}
+.admin-message{padding:15px 0;border-top:1px solid var(--line)}
+.admin-message:first-child{border-top:0}
+.admin-message h3{font-size:17px;margin:6px 0}
+.admin-message p{white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0 0}
+:root[data-theme="dark"] .dash-banner{background:linear-gradient(115deg,#090e20,#21183e)}
+:root[data-theme="dark"] .dash-kpi,:root[data-theme="dark"] .dash-panel{box-shadow:0 4px 18px rgba(0,0,0,.2)}
+@media(max-width:760px){.hero{padding:54px 0 46px}.hero-inner{grid-template-columns:1fr;gap:12px}.hero-art{min-height:235px}.art-frame{height:220px;width:min(80%,330px)}.art-sun{width:130px;height:130px}.steps{grid-template-columns:repeat(2,1fr)}.section{padding:50px 0}.portal-head{align-items:flex-start;flex-direction:column}}
+@media(max-width:520px){.wrap{padding:0 17px}.nr{height:auto;min-height:64px}.logo{font-size:22px}nav{gap:2px}.lnk{font-size:12px;padding:8px}.btn.sm{padding:8px 11px}.hero h1{font-size:clamp(40px,12vw,56px)}.hero-search{border-radius:18px;flex-wrap:wrap}.hero-search input{flex:1}.hero-search .btn{width:100%}.section-head{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.cta-box{align-items:flex-start;flex-direction:column;padding:28px 24px}.stats{grid-template-columns:1fr}.stats .panel b{font-size:26px}}
+@media(max-width:760px){.dash-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.dash-charts{grid-template-columns:1fr}.dash-top{align-items:flex-start;flex-direction:column}.dash-actions{width:100%;justify-content:space-between}.dash-booking{grid-template-columns:1fr auto}.dash-booking .acts{grid-column:1/-1}}
+@media(max-width:520px){.dash-tabs{margin-top:16px}.dash-tab{padding:10px 12px}.dash-kpi{padding:13px}.listing-form{grid-template-columns:1fr}.listing-form .full{grid-column:auto}.mix-layout{justify-content:space-around}}
+</style></head>
+<body><div id="app"></div>
+<script>
+const cats=["All","Photography","Videography","Events"];
+const hue={Photography:"#0b7a75,#7fd1b9",Videography:"#1f3a5f,#5b8def",Events:"#f5b82e,#f08a5d"};
+const today=new Date().toISOString().slice(0,10);
+let T=null;try{T=localStorage.getItem("cv_token")}catch(e){}
+let savedTheme=null;try{savedTheme=localStorage.getItem("cv_theme")}catch(e){}
+const theme=savedTheme==="light"||savedTheme==="dark"?savedTheme:(window.matchMedia?.("(prefers-color-scheme: dark)").matches?"dark":"light");
+const S={view:"browse",user:null,P:[],bk:[],cat:"All",q:"",sel:null,mode:"in",role:"consumer",msg:null,after:null,theme,dashTab:"overview",listingEdit:false,adminOverview:null,adminTab:"overview",adminRows:[],adminSearch:""};
+document.documentElement.dataset.theme=S.theme;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s);
+const peso=n=>"₱"+n.toLocaleString("en-PH");
+const find=id=>S.P.find(p=>p.id===id);
+async function api(path,opt={}){
+  const r=await fetch("/api"+path,{method:opt.method||"GET",headers:{"Content-Type":"application/json",...(T?{Authorization:"Bearer "+T}:{})},body:opt.body?JSON.stringify(opt.body):undefined});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||"Something went wrong. Try again.");
+  return j}
+const fail=e=>{S.msg=["err",e.message];render()};
+async function loadBk(){try{S.bk=await api("/bookings")}catch(e){S.msg=["err",e.message]}}
+async function loadAdminSection(section){
+  S.adminTab=section;S.adminSearch="";
+  if(section==="overview"){S.adminRows=[];S.adminOverview=await api("/admin/overview")}
+  else S.adminRows=await api("/admin/"+section);
+}
+async function go(v){S.view=v;S.msg=null;if(v==="bookings"&&S.user)await loadBk();if(v==="admin"&&S.user?.isAdmin){try{await loadAdminSection(S.adminTab)}catch(e){S.msg=["err",e.message]}}render();scrollTo(0,0)}
+function banner(){return S.msg?`<div class="msg ${S.msg[0]}">${esc(S.msg[1])}</div>`:""}
+function nav(){const u=S.user,on=v=>S.view===v?" on":"";
+return `<header><div class="wrap nr"><div class="logo" data-act="go" data-v="browse">Creativ<i>o</i></div><nav>
+<button class="lnk${on("browse")}" data-act="go" data-v="browse">Browse</button>
+${u?`${u.role==="provider"?`<button class="lnk${on("bookings")}" data-act="go" data-v="bookings">Dashboard</button>`:`<button class="lnk${on("bookings")}" data-act="go" data-v="bookings">My bookings</button>`}${u.isAdmin?`<button class="lnk${on("admin")}" data-act="go" data-v="admin">Admin panel</button>`:`<button class="lnk${on("contact")}" data-act="go" data-v="contact">Contact admin</button>`}<button class="lnk" data-act="out">Sign out</button>`:`<button class="lnk" data-act="go" data-v="auth">Sign in</button><button class="btn sm" data-act="signup">Join Creativo</button>`}
+<button class="lnk theme-toggle" data-act="theme" aria-pressed="${S.theme==="dark"}" aria-label="Switch to ${S.theme==="dark"?"light":"dark"} mode" title="Switch to ${S.theme==="dark"?"light":"dark"} mode">${S.theme==="dark"?"☀":"☾"}</button>
+</nav></div></header>`}
+function ratingLabel(p){return p.reviewCount?`★ ${esc(p.rating)} · ${p.reviewCount} ${p.reviewCount===1?"rating":"ratings"}`:p.rating==="New"?"New profile":"★ "+esc(p.rating)}
+function cards(){const q=S.q.toLowerCase();
+const r=S.P.filter(p=>(S.cat==="All"||p.cat===S.cat)&&(p.name+p.city+p.tag+p.tags.join(" ")).toLowerCase().includes(q));
+return r.length?r.map(p=>`<div class="card" tabindex="0" role="button" aria-label="View ${esc(p.name)} profile" data-act="open" data-id="${p.id}"><div class="cover" style="background:linear-gradient(135deg,${hue[p.cat]})"><span>${esc(p.cat)}</span></div><div class="cb"><h3>${esc(p.name)}</h3><div class="mute sm">${esc(p.tag)}</div><div class="provider-tags">${p.tags.slice(0,3).map(t=>`<span>${esc(t)}</span>`).join("")}</div><div class="row"><span>${ratingLabel(p)}</span><span>from ${peso(p.rate)}</span></div><div class="mute sm" style="margin-top:9px">${esc(p.city)}</div></div></div>`).join(""):`<div class="empty">No creatives match that search. Try another category or clear the search box.</div>`}
+function browse(){return `<main class="home">
+<section class="hero"><div class="wrap hero-inner"><div class="hero-copy"><span class="eyebrow">Creativo · Local talent, all in one place</span><h1>Find the perfect creative team for your event.</h1><p>Discover photographers, videographers, and event organizers around Surigao. Compare local services and send a booking request in minutes.</p>
+<div class="hero-search"><span class="search-icon" aria-hidden="true">⌕</span><input id="q" aria-label="Search creatives" placeholder="Search a name, town, or specialty" value="${esc(S.q)}"><button class="btn" data-act="scroll" data-target="services">Find a creative</button></div>
+<div class="hero-cats">${cats.slice(1).map(c=>`<button data-act="cat" data-c="${c}">${c}</button>`).join("")}</div></div>
+<div class="hero-art" aria-hidden="true"><div class="art-frame"><div class="art-sun"></div><div class="art-hill"></div><div class="art-caption"><b>Made for your moments</b><span>Creative services, close to home</span></div></div><div class="art-stamp"><b>${S.P.length} local creatives</b><span>Ready to be discovered</span></div></div></div></section>
+<section class="section" id="services"><div class="wrap"><div class="section-head"><div><span class="section-kicker">Explore Creativo</span><h2>Find your kind of creative.</h2><p>Browse local talent and choose the right fit for your next event.</p></div><span class="mute sm">${S.P.length} ${S.P.length===1?"creative":"creatives"} listed</span></div>
+<div class="service-tools">${cats.map(c=>`<button class="chip${S.cat===c?" on":""}" data-act="cat" data-c="${c}">${c==="All"?"All services":c}</button>`).join("")}</div>
+<div class="grid" id="grid">${cards()}</div></div></section>
+<section class="section how"><div class="wrap"><span class="section-kicker">Simple by design</span><h2>From idea to booked.</h2><p class="mute">A clearer way to find and connect with local creative professionals.</p><div class="steps">
+<article class="step"><div class="step-number">01</div><h3>Browse & discover</h3><p>Explore local photographers, videographers, and event organizers.</p></article>
+<article class="step"><div class="step-number">02</div><h3>Compare your options</h3><p>Review each provider’s services, location, specialties, and starting rate.</p></article>
+<article class="step"><div class="step-number">03</div><h3>Send a request</h3><p>Choose a date and tell the provider what you have in mind.</p></article>
+<article class="step"><div class="step-number">04</div><h3>Hear back from them</h3><p>Track your request and see the provider’s response in your bookings.</p></article>
+</div></div></section>
+<section class="creative-cta"><div class="wrap"><div class="cta-box"><div><span class="eyebrow">For local creatives</span><h2>Let more people discover your work.</h2><p>Create a provider profile and start receiving booking requests.</p></div><button class="btn" data-act="providerSignup">Join as a provider</button></div></div></section>
+<footer><div class="wrap">Creativo · Connecting Surigao with local creative talent</div></footer></main>`}
+function detail(){const p=find(S.sel);if(!p)return browse();return `<div class="wrap pg"><button class="btn alt sm back" data-act="go" data-v="browse">Back to browse</button>${banner()}
+<div class="two"><div><h1 style="font-size:clamp(30px,5vw,46px)">${esc(p.name)}</h1><div class="mute" style="margin-top:6px">${esc(p.cat)} in ${esc(p.city)} · ${ratingLabel(p)}</div>
+<div class="big" style="background:linear-gradient(135deg,${hue[p.cat]})"></div><p>${esc(p.about)}</p><div class="tags">${p.tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div></div>
+<div class="panel"><h3 style="font-size:22px">Request a booking</h3><div class="mute sm" style="margin-top:4px">From ${peso(p.rate)} per session. You pay only after ${esc(p.name)} accepts.</div>
+<label for="d">Date</label><input id="d" type="date" min="${today}">
+<label for="n">What do you need?</label><textarea id="n" rows="4" maxlength="500" placeholder="Event type, location, number of guests"></textarea>
+<div style="margin-top:16px"><button class="btn" style="width:100%" data-act="book">${S.user?"Send booking request":"Sign in to book"}</button></div></div></div></div>`}
+function auth(){const up=S.mode==="up";return `<div class="wrap pg" style="max-width:460px">${banner()}<div class="panel"><h2 style="font-size:30px">${up?"Create your account":"Welcome back"}</h2>
+${up?`<label for="nm">Name</label><input id="nm" autocomplete="name"><label>I want to</label><div class="seg"><button class="chip${S.role==="consumer"?" on":""}" data-act="role" data-r="consumer">Book creatives</button><button class="chip${S.role==="provider"?" on":""}" data-act="role" data-r="provider">Offer my services</button></div>
+${S.role==="provider"?`<label for="ct">My category</label><select id="ct"><option>Photography</option><option>Videography</option><option>Events</option></select>`:""}`:""}
+<label for="em">Email</label><input id="em" type="email" autocomplete="email"><label for="pw">Password</label><input id="pw" type="password" autocomplete="${up?"new-password":"current-password"}" placeholder="At least 6 characters">
+<div style="margin-top:18px"><button class="btn" style="width:100%" data-act="auth">${up?"Create account":"Sign in"}</button></div>
+<div style="margin-top:14px;text-align:center"><button class="lnk" data-act="mode">${up?"I already have an account":"Create a new account"}</button></div></div></div>`}
+function providerDashboard(){
+const p=find(S.user.providerId)||{name:S.user.name,cat:"Photography",city:"",rate:0,rating:"New",tag:"",about:"",tags:[]};
+const demo=S.user.email==="lumen@demo.ph";
+const total=demo?42:S.bk.length,accepted=S.bk.filter(b=>b.status==="Accepted").length;
+const revenue=demo?417000:accepted*p.rate,average=demo?Math.round(revenue/total):(accepted?Math.round(revenue/accepted):0);
+const tab=S.dashTab;
+const tabs=[["overview","Overview"],["bookings","Bookings"],["reviews","Reviews"]];
+const chart=`<svg class="dash-chart" viewBox="0 0 520 205" role="img" aria-label="Illustrative monthly revenue and booking chart">
+<g stroke="var(--line)" stroke-width="1"><path d="M48 22H500M48 62H500M48 102H500M48 142H500M48 182H500"/></g>
+<g fill="var(--mute)" font-size="10"><text x="4" y="25">₱100k</text><text x="10" y="65">₱75k</text><text x="10" y="105">₱50k</text><text x="10" y="145">₱25k</text><text x="21" y="185">₱0</text>
+<text x="48" y="199">Oct</text><text x="134" y="199">Nov</text><text x="220" y="199">Dec</text><text x="306" y="199">Jan</text><text x="392" y="199">Feb</text><text x="478" y="199">Mar</text></g>
+<path d="M50 145L136 111L222 43L308 107L394 85L480 24" fill="none" stroke="#382b70" stroke-width="3"/>
+<path d="M50 158L136 134L222 79L308 132L394 115L480 68" fill="none" stroke="#f1ad32" stroke-width="2.5" stroke-dasharray="5 4"/>
+<g fill="#382b70"><circle cx="50" cy="145" r="4"/><circle cx="136" cy="111" r="4"/><circle cx="222" cy="43" r="4"/><circle cx="308" cy="107" r="4"/><circle cx="394" cy="85" r="4"/><circle cx="480" cy="24" r="4"/></g>
+<g fill="#f1ad32"><circle cx="50" cy="158" r="3"/><circle cx="136" cy="134" r="3"/><circle cx="222" cy="79" r="3"/><circle cx="308" cy="132" r="3"/><circle cx="394" cy="115" r="3"/><circle cx="480" cy="68" r="3"/></g></svg>`;
+const listForm=()=>`<div class="dash-panel dash-section"><h2>Edit your listing</h2><form class="listing-form" data-form="listing">
+<div><label for="listing-name">Business name</label><input id="listing-name" name="name" maxlength="80" required value="${esc(p.name)}"></div>
+<div><label for="listing-category">Category</label><select id="listing-category" name="cat">${cats.slice(1).map(c=>`<option${p.cat===c?" selected":""}>${c}</option>`).join("")}</select></div>
+<div><label for="listing-city">City</label><input id="listing-city" name="city" maxlength="100" required value="${esc(p.city)}"></div>
+<div><label for="listing-rate">Starting rate (₱)</label><input id="listing-rate" name="rate" type="number" min="0" step="1" required value="${p.rate}"></div>
+<div class="full"><label for="listing-tag">Short service description</label><input id="listing-tag" name="tag" maxlength="160" required value="${esc(p.tag)}"></div>
+<div class="full"><label for="listing-about">About your services</label><textarea id="listing-about" name="about" rows="4" maxlength="1000" required>${esc(p.about)}</textarea></div>
+<div class="full"><label for="listing-tags">Specialties (comma-separated)</label><input id="listing-tags" name="tags" maxlength="400" required value="${esc(p.tags.join(", "))}"></div>
+</form><div class="listing-form-actions"><button class="btn alt" data-act="cancelListing">Cancel</button><button class="btn" data-act="saveListing">Save listing</button></div></div>`;
+const bookingRows=S.bk.length?S.bk.map(b=>`<div class="dash-booking"><div><b>${esc(b.clientName)}</b><div class="mute sm">${esc(b.date)} · ${esc(b.note)}</div>${b.status==="Accepted"?`<div class="mute sm">Client email: ${b.contactEmail?`<a href="mailto:${esc(b.contactEmail)}">${esc(b.contactEmail)}</a>`:"Not available"}</div>`:""}</div><span class="st ${b.status}">${esc(b.status)}</span>${b.status==="Pending"?`<div class="acts"><button class="btn sm" data-act="set" data-id="${b.id}" data-s="Accepted">Accept</button><button class="btn bad sm" data-act="set" data-id="${b.id}" data-s="Declined">Decline</button></div>`:"<span></span>"}</div>`).join(""):`<div class="empty">No booking requests yet. Share your listing to start receiving requests.</div>`;
+const reviews=demo?`<div class="dash-review"><b>Alex R.</b> <span class="mute sm">★★★★★ · Sample review</span><p>Wonderful to work with. The photos captured every special moment.</p></div><div class="dash-review"><b>Jamie C.</b> <span class="mute sm">★★★★★ · Sample review</span><p>Professional, friendly, and delivered beautiful photos quickly.</p></div>`:p.reviewCount?`<div class="dash-review"><b>${esc(p.rating)} ★</b><span class="mute sm"> · ${p.reviewCount} client ${p.reviewCount===1?"rating":"ratings"}</span><p>Your average rating from accepted bookings.</p></div>`:`<div class="empty">Client ratings will appear here after an accepted booking is rated.</div>`;
+return `<main class="dash"><section class="dash-banner"><div class="wrap"><div class="dash-top"><div><span class="eyebrow">Provider portal</span><h1>📷 ${esc(p.name)}</h1><div class="mute">${esc(p.cat)} · ${esc(p.city)} · ${demo?"Demo account":"Your listing"}</div></div><div class="dash-actions"><button class="btn" data-act="listing">${S.listingEdit?"Close listing editor":"＋ Edit listing"}</button><button class="btn alt sm" data-act="go" data-v="browse">Marketplace</button></div></div><div class="dash-tabs" role="tablist">${tabs.map(([id,label])=>`<button class="dash-tab${tab===id?" on":""}" role="tab" aria-selected="${tab===id}" data-act="dashTab" data-tab="${id}">${label}</button>`).join("")}</div></div></section>
+<div class="wrap dash-content">${banner()}${S.listingEdit?listForm():""}
+${tab==="overview"?`<div class="dash-kpis">
+<article class="dash-kpi"><div class="dash-kpi-label">${demo?"Total revenue · demo":"Est. revenue · all time"}<span>💰</span></div><div class="dash-kpi-value">${peso(revenue)}</div><div class="dash-kpi-note">${demo?"Illustrative sample metric":"Estimated from accepted bookings at your rate"}</div></article>
+<article class="dash-kpi"><div class="dash-kpi-label">Total bookings${demo?" · demo":""}<span>▦</span></div><div class="dash-kpi-value">${total}</div><div class="dash-kpi-note">${demo?"Sample dashboard data":`${S.bk.length} real request${S.bk.length===1?"":"s"} recorded`}</div></article>
+<article class="dash-kpi"><div class="dash-kpi-label">Avg. per booking${demo?" · demo":""}<span>▥</span></div><div class="dash-kpi-value">${peso(average)}</div><div class="dash-kpi-note">${demo?"Illustrative sample metric":"Based on accepted bookings"}</div></article>
+<article class="dash-kpi"><div class="dash-kpi-label">Avg. rating${demo?" · demo":""}<span>★</span></div><div class="dash-kpi-value">${demo?"5.0":esc(p.rating)}</div><div class="dash-kpi-note">${demo?"Sample rating preview":"Current listing rating"}</div></article></div>
+<div class="dash-charts"><section class="dash-panel"><h2>Monthly Revenue &amp; Bookings</h2>${demo?`${chart}<div class="chart-legend"><span class="legend-key"><i></i>Revenue</span><span class="legend-key bookings"><i></i>Bookings</span></div><p class="demo-note">Illustrative demo chart. Actual monthly reports will follow recorded bookings.</p>`:`<div class="empty">Monthly analytics will appear here as bookings are recorded.</div>`}</section>
+<section class="dash-panel"><h2>Service Mix <span class="mute sm">${demo?"· demo":"· listing"}</span></h2><div class="mix-layout">${demo?'<div class="mix-donut" role="img" aria-label="Sample service mix chart"></div>':""}<ul class="mix-legend">${(demo?[["Weddings","42%"],["Corporate","28%"],["Debut","18%"],["Birthday","12%"]]:p.tags.slice(0,4).map(tag=>[tag,""])).map(([tag,percent])=>`<li><i></i><span>${esc(tag)}</span><b>${percent}</b></li>`).join("")}</ul></div><p class="demo-note">${demo?"Illustrative sample categories.":"Specialties from your listing; analytics are not available yet."}</p></section></div>
+<section class="dash-panel dash-section"><h2>Recent bookings <button class="lnk sm" data-act="dashTab" data-tab="bookings">View all</button></h2>${bookingRows}</section>`
+:tab==="bookings"?`<section class="dash-panel"><h2>Booking requests</h2>${bookingRows}</section>`
+:`<section class="dash-panel"><h2>Reviews ${demo?'<span class="mute sm">· sample preview</span>':""}</h2>${reviews}${demo?'<p class="demo-note">Sample reviews are for dashboard preview only; these are not client-submitted reviews.</p>':""}</section>`}
+</div></main>`;
+}
+function adminTableBody(){
+const rows=S.adminRows, query=S.adminSearch.toLowerCase();
+let headers=[], data=[];
+if(S.adminTab==="users"){
+headers=["Name","Email","Account type","Joined"];
+data=rows.filter(r=>(r.name+r.email+r.role+r.created).toLowerCase().includes(query))
+  .map(r=>[esc(r.name),esc(r.email),r.isAdmin?"Admin":r.role==="consumer"?"Client":"Provider",esc(r.created||"—")]);
+}else if(S.adminTab==="providers"){
+headers=["Provider","Category","City","Starting rate","Account email","Rating"];
+data=rows.filter(r=>(r.name+r.cat+r.city+(r.accountEmail||"")+r.rating).toLowerCase().includes(query))
+  .map(r=>[esc(r.name),esc(r.cat),esc(r.city),peso(r.rate),esc(r.accountEmail||"No linked account"),esc(r.rating)]);
+}else if(S.adminTab==="messages"){
+const messages=rows.filter(r=>(r.senderName+r.senderEmail+r.senderRole+r.subject+r.message+r.created).toLowerCase().includes(query));
+return messages.length?messages.map(m=>`<article class="admin-message"><div class="row" style="margin-top:0"><b>${esc(m.senderName)} · ${m.senderRole==="consumer"?"Client":"Provider"}</b><span class="mute sm">${esc(m.created)}</span></div><div class="mute sm">${esc(m.senderEmail)}</div><h3>${esc(m.subject)}</h3><p>${esc(m.message)}</p></article>`).join(""):`<div class="empty">${query?"No matching messages.":"No messages yet."}</div>`;
+}else{
+headers=["Client","Provider","Event date","Request","Status","Created"];
+data=rows.filter(r=>(r.clientName+(r.clientEmail||"")+r.providerName+r.date+r.note+r.status+r.created).toLowerCase().includes(query))
+  .map(r=>[`${esc(r.clientName)}<div class="mute sm">${esc(r.clientEmail||"")}</div>`,esc(r.providerName),esc(r.date),esc(r.note),`<span class="st ${esc(r.status)}">${esc(r.status)}</span>`,esc(r.created||"—")]);
+}
+return data.length?`<table class="admin-table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${data.map(row=>`<tr>${row.map(cell=>`<td>${cell}</td>`).join("")}</tr>`).join("")}</tbody></table>`:`<div class="empty">${query?"No matching records.":"No records yet."}</div>`;
+}
+function adminDashboard(){
+if(!S.user?.isAdmin)return S.user?bookings():auth();
+const overview=S.adminOverview, counts=overview?.counts;
+const tabs=[["overview","Overview"],["users","People"],["providers","Providers"],["bookings","Bookings"],["messages",`Messages${counts?.totalMessages?` (${counts.totalMessages})`:""}`]];
+const tabButtons=tabs.map(([id,label])=>`<button class="dash-tab${S.adminTab===id?" on":""}" role="tab" aria-selected="${S.adminTab===id}" data-act="adminTab" data-tab="${id}">${label}</button>`).join("");
+let content="";
+if(S.adminTab==="overview"&&counts){
+const kpis=[["Accounts",counts.totalUsers],["Clients",counts.totalClients],["Provider profiles",counts.totalProviders],["Bookings",counts.totalBookings],["Pending bookings",counts.pendingBookings],["Messages",counts.totalMessages]];
+content=`<div class="dash-kpis">${kpis.map(([label,value])=>`<article class="dash-kpi"><div class="dash-kpi-label">${label}</div><div class="dash-kpi-value">${value}</div></article>`).join("")}</div>
+<div class="dash-charts">
+<section class="dash-panel"><h2>Recently joined</h2>${overview.recentUsers.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Name</th><th>Email</th><th>Type</th><th>Joined</th></tr></thead><tbody>${overview.recentUsers.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(u.email)}</td><td>${u.isAdmin?"Admin":u.role==="consumer"?"Client":"Provider"}</td><td>${esc(u.created||"—")}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">No accounts yet.</div>`}</section>
+<section class="dash-panel"><h2>Recent bookings</h2>${overview.recentBookings.length?overview.recentBookings.map(b=>`<div class="dash-booking"><div><b>${esc(b.clientName)}</b><div class="mute sm">${esc(b.providerName)} · ${esc(b.date)}</div></div><span class="st ${esc(b.status)}">${esc(b.status)}</span></div>`).join(""):`<div class="empty">No bookings yet.</div>`}</section></div>`;
+}else{
+const title={users:"People",providers:"Provider profiles",bookings:"Bookings",messages:"Messages from clients and providers"}[S.adminTab];
+content=`<section class="dash-panel"><div class="admin-tools"><h2>${title}</h2><input class="admin-search" id="admin-search" type="search" placeholder="Search ${title.toLowerCase()}" value="${esc(S.adminSearch)}" aria-label="Search ${title.toLowerCase()}"></div><div class="${S.adminTab==="messages"?"":"admin-table-wrap"}" id="admin-table">${adminTableBody()}</div></section>`;
+}
+return `<main class="dash"><section class="dash-banner"><div class="wrap"><div class="dash-top"><div><span class="eyebrow">Creativo administration</span><h1>Admin dashboard</h1><div class="mute">Marketplace overview and account activity</div></div><div class="dash-actions"><button class="btn alt sm" data-act="go" data-v="browse">Marketplace</button></div></div><div class="dash-tabs" role="tablist">${tabButtons}</div></div></section><div class="wrap dash-content">${banner()}${content}</div></main>`;
+}
+function bookings(){const u=S.user;if(!u)return auth();
+if(u.role==="provider")return providerDashboard();
+return `<div class="wrap pg">${banner()}<h1 style="font-size:clamp(30px,5vw,44px)">My bookings</h1>
+<div class="panel" style="margin-top:18px">${S.bk.length?S.bk.map(b=>`<div class="bk"><div><b>${esc(b.providerName)}</b> <span class="st ${esc(b.status)}">${esc(b.status)}</span><div class="mute sm">${esc(b.date)} · ${esc(b.note)}</div>${b.status==="Accepted"?`<div class="mute sm">Provider email: ${b.contactEmail?`<a href="mailto:${esc(b.contactEmail)}">${esc(b.contactEmail)}</a>`:"Not available"}</div>`:""}</div>${b.status==="Pending"?`<button class="btn bad sm" data-act="set" data-id="${b.id}" data-s="Cancelled">Cancel</button>`:b.status==="Accepted"&&!b.rating?`<form class="rating-form" id="rating-form-${b.id}"><label for="rating-${b.id}">Rate this creative</label><select id="rating-${b.id}" name="rating" required><option value="">Choose stars</option><option value="5">★★★★★ · Excellent</option><option value="4">★★★★ · Good</option><option value="3">★★★ · Okay</option><option value="2">★★ · Poor</option><option value="1">★ · Very poor</option></select><button class="btn sm" type="button" data-act="rate" data-id="${b.id}">Submit rating</button></form>`:b.rating?`<div class="rating-done">Your rating: ${"★".repeat(b.rating)}${"☆".repeat(5-b.rating)}</div>`:""}</div>`).join(""):`<div class="mute">You have no bookings yet. Browse creatives and send your first request.</div>`}</div>
+<div style="margin-top:16px"><button class="btn" data-act="go" data-v="browse">Browse creatives</button></div></div>`}
+function contactAdmin(){if(!S.user||S.user.isAdmin)return auth();return `<main class="wrap pg" style="max-width:720px">${banner()}<section class="panel"><span class="eyebrow">We’re here to help</span><h1 style="font-size:clamp(30px,5vw,44px);margin-top:8px">Contact the admin team</h1><p class="mute">Ask a question or share feedback. Your name and account email will be included so the admin team can follow up.</p><form data-form="admin-message"><label for="message-subject">Subject</label><input id="message-subject" name="subject" maxlength="100" required placeholder="What can we help with?"><label for="message-body">Message</label><textarea id="message-body" name="message" rows="7" maxlength="2000" required placeholder="Type your question or message here"></textarea><div style="margin-top:16px"><button class="btn" type="button" data-act="sendMessage">Send message</button></div></form></section></main>`}
+function render(){const v=S.view;$("#app").innerHTML=nav()+(v==="browse"?browse():v==="detail"?detail():v==="auth"?auth():v==="admin"?adminDashboard():v==="contact"?contactAdmin():bookings())}
+function saveToken(t){T=t;try{t?localStorage.setItem("cv_token",t):localStorage.removeItem("cv_token")}catch(e){}}
+function toggleTheme(){S.theme=S.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=S.theme;try{localStorage.setItem("cv_theme",S.theme)}catch(e){}render()}
+document.addEventListener("input",e=>{if(e.target.id==="q"){S.q=e.target.value;$("#grid").innerHTML=cards()}else if(e.target.id==="admin-search"){S.adminSearch=e.target.value;$("#admin-table").innerHTML=adminTableBody()}});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.classList.contains("card"))e.target.click()});
+document.addEventListener("click",async e=>{const t=e.target.closest("[data-act]");if(!t)return;const d=t.dataset,a=d.act,v=id=>($(id)||{}).value||"";
+try{
+if(a==="go")await go(d.v);
+else if(a==="theme")toggleTheme();
+else if(a==="dashTab"){S.dashTab=d.tab;render()}
+else if(a==="adminTab"){await loadAdminSection(d.tab);render()}
+else if(a==="sendMessage"){
+  const form=$('[data-form="admin-message"]');
+  if(!form.reportValidity())return;
+  const body=Object.fromEntries(new FormData(form).entries());
+  await api("/messages",{method:"POST",body});
+  S.msg=["ok","Your message was sent to the admin team."];render()
+}
+else if(a==="listing"){S.listingEdit=!S.listingEdit;render()}
+else if(a==="cancelListing"){S.listingEdit=false;render()}
+else if(a==="saveListing"){
+  const form=$('[data-form="listing"]');
+  if(!form.reportValidity())return;
+  const fd=new FormData(form),body=Object.fromEntries(fd.entries());
+  body.rate=Number(body.rate);body.tags=String(body.tags).split(",").map(tag=>tag.trim()).filter(Boolean);
+  const updated=await api("/provider/profile",{method:"PATCH",body});
+  S.P=S.P.map(p=>p.id===updated.id?updated:p);S.listingEdit=false;S.msg=["ok","Your listing was updated."];render()
+}
+else if(a==="signup"){S.mode="up";S.role="consumer";S.msg=null;await go("auth")}
+else if(a==="providerSignup"){S.mode="up";S.role="provider";S.msg=null;await go("auth")}
+else if(a==="scroll")document.getElementById(d.target)?.scrollIntoView({behavior:"smooth"});
+else if(a==="cat"){S.cat=d.c;render();if(t.closest(".hero"))document.getElementById("services")?.scrollIntoView({behavior:"smooth"})}
+else if(a==="open"){S.sel=+d.id;await go("detail")}
+else if(a==="out"){saveToken(null);S.user=null;S.bk=[];await go("browse")}
+else if(a==="mode"){S.mode=S.mode==="up"?"in":"up";S.msg=null;render()}
+else if(a==="role"){S.role=d.r;render()}
+else if(a==="set"){await api("/bookings/"+d.id,{method:"PATCH",body:{status:d.s}});await loadBk();S.msg=["ok",d.s==="Accepted"?"Booking accepted.":d.s==="Declined"?"Booking declined.":"Booking cancelled."];render()}
+else if(a==="rate"){
+  const form=document.getElementById("rating-form-"+d.id);
+  if(!form.reportValidity())return;
+  const rating=Number(new FormData(form).get("rating"));
+  await api("/bookings/"+d.id+"/review",{method:"POST",body:{rating}});
+  S.P=await api("/providers");await loadBk();
+  S.msg=["ok","Thanks for rating this creative."];render()
+}
+else if(a==="book"){
+  if(!S.user){S.after="detail";S.mode="in";await go("auth");return}
+  const date=v("#d"),note=v("#n").trim();
+  if(!date||!note){S.msg=["err","Choose a date and describe what you need."];render();return}
+  await api("/bookings",{method:"POST",body:{providerId:S.sel,date,note}});
+  S.view="bookings";await loadBk();S.msg=["ok","Request sent. The provider will reply here."];render();scrollTo(0,0)}
+else if(a==="auth"){
+  const body={email:v("#em"),password:v("#pw")};
+  if(S.mode==="up"){body.name=v("#nm");body.role=S.role;body.category=v("#ct")||undefined}
+  const r=await api(S.mode==="up"?"/signup":"/login",{method:"POST",body});
+  saveToken(r.token);S.user=r.user;
+  if(S.mode==="up"&&r.user.role==="provider")S.P=await api("/providers");
+  const next=r.user.isAdmin?"admin":r.user.role==="provider"?"bookings":(S.after||"browse");S.after=null;await go(next)}
+}catch(err){fail(err)}});
+(async()=>{
+  $("#app").innerHTML='<div class="wrap pg mute">Loading…</div>';
+  try{S.P=await api("/providers")}catch(e){S.msg=["err","Could not load creatives. Refresh to try again."]}
+  if(T){try{S.user=(await api("/me")).user}catch(e){saveToken(null)}}
+  render()})();
+</script></body></html>
